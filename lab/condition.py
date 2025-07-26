@@ -54,3 +54,11 @@ def create_condition_gq_leq(min_cycle: int = None, max_cycle: int = None, cycle_
         return condition
     else:
         return condition2
+
+
+if __name__ == '__main__':
+    condition1 = create_condition_gq_leq(min_cycle=35, max_cycle=70)
+    condition2 = create_condition_gq_leq(min_cycle=35, max_cycle=70, cycle_mode="or")
+
+    for i in range(80):
+        print(i, condition1(i, {}), condition2(i, {}), condition1(i, {}) or condition2(i, {}))

@@ -78,6 +78,7 @@ class MarkovModel:
         self.states = states
         self.initial_distribution = initial_distribution
         self.state_map = {state.name: state for state in states}
+        self.state_index = {i: state.name for i, state in enumerate(states)}
         self.non_temporary_states = [s for s in states if not s.is_temporary]
 
         # 结果存储
@@ -109,7 +110,7 @@ class MarkovModel:
             cost = current_state.cost_func(cycle, params)
             utility = current_state.utility_func(cycle, params)
 
-            # 应用折扣
+            # 应用折扣 # 折扣不应该在这里，不符合通用规范
             discounted_cost = discount(cost, params.get("dr", 0), cycle)
             discounted_utility = discount(utility, params.get("dr", 0), cycle)
 
@@ -132,7 +133,11 @@ class MarkovModel:
             total_prob = sum(prob_func(cycle, params) for _, prob_func in transitions)
 
             if total_prob <= 0:
-                raise ValueError(f"在周期{cycle}，临时状态{current_state_name}没有有效的转移路径")
+                raise ValueError(f"在周期{cycle}，临时状态 {current_state_name} 没有有效的转移路径")
+            if total_prob >= 1 + 1e-8:
+                raise ValueError(f"在周期{cycle}，临时状态 {current_state_name} 转移概率和大于 1")
+            if total_prob <= 1 - 1e-8:
+                raise ValueError(f"在周期{cycle}，临时状态 {current_state_name} 转移概率和小于 1")
 
             # 处理每个适用的转移
             for to_state, prob_func in transitions:
@@ -230,6 +235,20 @@ class MarkovModel:
 
                     # 检查是否需要强制转移 (停留时间 >= tunnel_cycle)
                     if from_state.tunnel_cycle is not None and dwell_time >= from_state.tunnel_cycle:
+                        applicable_transitions = [
+                            transition for transition in from_state.tunnel_transitions
+                        ]
+
+                        # 计算总概率
+                        total_prob = sum(tran[1](t + 1, params)
+                                         for tran in applicable_transitions)
+
+                        # 确保总概率为1
+                        if total_prob > 1 + 1e-8:  # 允许小的浮点误差
+                            raise ValueError(f"在周期{t + 1}，状态{from_state.name}的总转移概率{total_prob}超过1")
+                        if total_prob < 1 - 1e-8:  # 允许小的浮点误差
+                            raise ValueError(f"在周期{t + 1}，状态{from_state.name}的总转移概率{total_prob}小于1")
+
                         # 使用强制转移规则
                         for to_state, prob_func in from_state.tunnel_transitions:
                             prob = prob_func(t + 1, params)
@@ -243,7 +262,7 @@ class MarkovModel:
                                 print("这个如果被打印，说明出错？")
                                 # 计算临时状态的成本和效用
                                 temp_cost, temp_utility, final_states = self._resolve_temporary_state(
-                                    t + 1, transferred_pop, to_state, edge_counts, edge_indices, params)
+                                    t, transferred_pop, to_state, edge_counts, edge_indices, params)
                                 cycle_temp_cost += temp_cost
                                 cycle_temp_utility += temp_utility
 
@@ -286,9 +305,11 @@ class MarkovModel:
                         total_prob = sum(tran["probability_func"](t + 1, params)
                                          for tran in applicable_transitions)
 
-                        # 确保总概率不超过1
+                        # 确保总概率为1
                         if total_prob > 1 + 1e-8:  # 允许小的浮点误差
                             raise ValueError(f"在周期{t + 1}，状态{from_state.name}的总转移概率{total_prob}超过1")
+                        if total_prob < 1 - 1e-8:  # 允许小的浮点误差
+                            raise ValueError(f"在周期{t + 1}，状态{from_state.name}的总转移概率{total_prob}小于1")
 
                         # 处理每个适用的转移
                         for transition in applicable_transitions:
@@ -303,10 +324,10 @@ class MarkovModel:
                             if to_state.is_temporary:
                                 # 计算临时状态的成本和效用
                                 temp_cost, temp_utility, final_states = self._resolve_temporary_state(
-                                    t + 1, transferred_pop, to_state, edge_counts, edge_indices, params)
+                                    t, transferred_pop, to_state, edge_counts, edge_indices, params)
                                 cycle_temp_cost += temp_cost
                                 cycle_temp_utility += temp_utility
-                                # print(f"{from_state.name} ->临时状态 {to_state.name} 转移到的终态: ", final_states)
+
                                 # 更新最终状态分布
                                 for final_state_name, pop in final_states.items():
                                     final_state = self.state_map[final_state_name]
