@@ -61,6 +61,8 @@ class State:
         :param to_state_name: 目标状态名称
         :param probability_func: 转移概率函数(周期, 参数)
         """
+        if self.tunnel_cycle is None:
+            raise ValueError("非 tunnel 状态不支持设置 tunnel 转移")
         self.tunnel_transitions.append((to_state, probability_func))
 
 

@@ -1,4 +1,5 @@
-from lab.markov5 import MarkovModel, State, discount, create_condition_gq_leq, create_condition
+from lab.markov_tunnel_db_v4 import MarkovModel, State, discount
+from lab.condition import create_condition, create_condition_gq_leq
 from parameter.define_parameters import Parameters
 from parameter.define_tables import Table
 
@@ -284,6 +285,7 @@ def my_treeage_shaicha():
         cost_zhi_CHB=(18689.5, "抗病毒治疗下慢乙肝费用"),
         cost_zhi_DCC=(43318.1, "抗病毒治疗下失代偿费用"),
         DR=(0.03, "贴现率"),
+        dr=(0.00, "贴现率2"),
         p_CC_DCC=(0.058, "代偿肝硬化_失代偿肝硬化"),
         p_CC_DCC_treat=(0.019, "治疗后 代偿肝硬化_失代偿肝硬化"),
         p_CC_Death=(0.031, "代偿肝硬化_死于代偿肝硬化"),
@@ -587,12 +589,12 @@ def my_treeage_shaicha():
     )
     cHCCI.add_transition(
         death_hcc,
-        probability_func=lambda cycle, p: params.get(key="p_HCCI_Death", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_HCCI_Death", index=int(cycle // 5 * 5))
     )
-    # cHCCI.add_transition(
-    #     cHCCI,
-    #     probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_HCCI_Death", index=cycle)
-    # )
+    cHCCI.add_transition(
+        cHCCI,
+        probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_HCCI_Death", index=int(cycle // 5 * 5))
+    )
     # endregion
     # region ===== cHCC-II =====
     cHCCII = State(
@@ -606,12 +608,12 @@ def my_treeage_shaicha():
     )
     cHCCII.add_transition(
         death_hcc,
-        probability_func=lambda cycle, p: params.get(key="p_HCCII_Death", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_HCCII_Death", index=int(cycle // 5 * 5))
     )
-    # cHCCII.add_transition(
-    #     cHCCII,
-    #     probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_HCCII_Death", index=cycle)
-    # )
+    cHCCII.add_transition(
+        cHCCII,
+        probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_HCCII_Death", index=int(cycle // 5 * 5))
+    )
     # endregion
     # region ===== cHCC-III =====
     cHCCIII = State(
@@ -625,12 +627,12 @@ def my_treeage_shaicha():
     )
     cHCCIII.add_transition(
         death_hcc,
-        probability_func=lambda cycle, p: params.get(key="p_HCCIII_Death", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_HCCIII_Death", index=int(cycle // 5 * 5))
     )
-    # cHCCIII.add_transition(
-    #     cHCCIII,
-    #     probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_HCCIII_Death", index=cycle)
-    # )
+    cHCCIII.add_transition(
+        cHCCIII,
+        probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_HCCIII_Death", index=int(cycle // 5 * 5))
+    )
     # endregion
     # region ===== cHCC-IV =====
     cHCCIV = State(
@@ -644,12 +646,12 @@ def my_treeage_shaicha():
     )
     cHCCIV.add_transition(
         death_hcc,
-        probability_func=lambda cycle, p: params.get(key="p_HCCIV_Death", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_HCCIV_Death", index=int(cycle // 5 * 5))
     )
-    # cHCCIV.add_transition(
-    #     cHCCIV,
-    #     probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_HCCIV_Death", index=cycle)
-    # )
+    cHCCIV.add_transition(
+        cHCCIV,
+        probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_HCCIV_Death", index=int(cycle // 5 * 5))
+    )
     # endregion
 
     # region ===== sHCC-I =====
@@ -665,12 +667,12 @@ def my_treeage_shaicha():
     )
     sHCCI.add_transition(
         death_hcc,
-        probability_func=lambda cycle, p: params.get(key="p_sHCCI_Death", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_sHCCI_Death", index=int(cycle // 5 * 5))
     )
-    # sHCCI.add_transition(
-    #     sHCCI,
-    #     probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_sHCCI_Death", index=cycle)
-    # )
+    sHCCI.add_transition(
+        sHCCI,
+        probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_sHCCI_Death", index=int(cycle // 5 * 5))
+    )
     # endregion
     # region ===== sHCC-II =====
     sHCCII = State(
@@ -685,12 +687,12 @@ def my_treeage_shaicha():
     )
     sHCCII.add_transition(
         death_hcc,
-        probability_func=lambda cycle, p: params.get(key="p_sHCCII_Death", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_sHCCII_Death", index=int(cycle // 5 * 5))
     )
-    # sHCCII.add_transition(
-    #     sHCCII,
-    #     probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_sHCCII_Death", index=cycle)
-    # )
+    sHCCII.add_transition(
+        sHCCII,
+        probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_sHCCII_Death", index=int(cycle // 5 * 5))
+    )
     # endregion
     # region ===== sHCC-III =====
     sHCCIII = State(
@@ -705,12 +707,12 @@ def my_treeage_shaicha():
     )
     sHCCIII.add_transition(
         death_hcc,
-        probability_func=lambda cycle, p: params.get(key="p_sHCCIII_Death", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_sHCCIII_Death", index=int(cycle // 5 * 5))
     )
-    # sHCCIII.add_transition(
-    #     sHCCIII,
-    #     probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_sHCCIII_Death", index=cycle)
-    # )
+    sHCCIII.add_transition(
+        sHCCIII,
+        probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_sHCCIII_Death", index=int(cycle // 5 * 5))
+    )
     # endregion
     # region ===== sHCC-IV =====
     sHCCIV = State(
@@ -725,12 +727,12 @@ def my_treeage_shaicha():
     )
     sHCCIV.add_transition(
         death_hcc,
-        probability_func=lambda cycle, p: params.get(key="p_sHCCIV_Death", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_sHCCIV_Death", index=int(cycle // 5 * 5))
     )
-    # sHCCIV.add_transition(
-    #     sHCCIV,
-    #     probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_sHCCIV_Death", index=cycle)
-    # )
+    sHCCIV.add_transition(
+        sHCCIV,
+        probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_sHCCIV_Death", index=int(cycle // 5 * 5))
+    )
     # endregion
 
     sCC = State(
@@ -749,7 +751,7 @@ def my_treeage_shaicha():
         name="CC",
         description="CC",
         cost_func=lambda cycle, p: params.Cost_Treat_CC,
-        utility_func=lambda cycle, p: discount(params.U_CC, params.DR, cycle)
+        utility_func=lambda cycle, p: discount(params.U_CC, params.DR, cycle),
     )
     DCC = State(
         name="DCC",
@@ -760,10 +762,12 @@ def my_treeage_shaicha():
     tCC = State(
         name="tCC",
         description="tCC",
+        tunnel_cycle=11
     )
     tDCC = State(
         name="tDCC",
         description="tDCC",
+        tunnel_cycle=11
     )
     # region ===== 治愈状态 =====
     cured = State(
@@ -774,10 +778,10 @@ def my_treeage_shaicha():
         death,
         probability_func=lambda cycle, p: params.get(key="p_Death", index=cycle)
     )
-    # cured.add_transition(
-    #     cured,
-    #     probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle)
-    # )
+    cured.add_transition(
+        cured,
+        probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle)
+    )
     # endregion
     # region ===== 健康筛查分支 =====
     pre_ps_HCCI = State(
@@ -795,7 +799,7 @@ def my_treeage_shaicha():
     )
     health_shaicha.add_transition(
         pre_ps_HCCI,
-        probability_func=lambda cycle, p: params.get(key="p_health_pHCCI", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_health_pHCCI", index=int(cycle // 5 * 5))
     )
     health_shaicha.add_transition(
         death,
@@ -803,18 +807,18 @@ def my_treeage_shaicha():
     )
     health_shaicha.add_transition(
         CHB,
-        probability_func=lambda cycle, p: params.get(key="p_health_CHB", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_health_CHB", index=int(cycle // 5 * 5))
     )
     health_shaicha.add_transition(
         Healthy,
         probability_func=lambda cycle, p: \
-            1 - params.get(key="p_health_pHCCI", index=cycle) - params.get(key="p_Death", index=cycle) - params.get(key="p_health_CHB", index=cycle)
+            1 - params.get(key="p_health_pHCCI", index=int(cycle // 5 * 5)) - params.get(key="p_Death", index=cycle) - params.get(key="p_health_CHB", index=int(cycle // 5 * 5))
     )
     # endregion
     # region ===== 健康不筛查分支 =====
     health_noshaicha.add_transition(
         pHCCI,
-        probability_func=lambda cycle, p: params.get(key="p_health_pHCCI", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_health_pHCCI", index=int(cycle // 5 * 5))
     )
     health_noshaicha.add_transition(
         death,
@@ -822,13 +826,13 @@ def my_treeage_shaicha():
     )
     health_noshaicha.add_transition(
         CHB,
-        probability_func=lambda cycle, p: params.get(key="p_health_CHB", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_health_CHB", index=int(cycle // 5 * 5))
     )
     health_noshaicha.add_transition(
         Healthy,
         probability_func=lambda cycle, p: \
-            1 - params.get(key="p_health_pHCCI", index=cycle) - params.get(key="p_Death", index=cycle) - params.get(
-                key="p_health_CHB", index=cycle)
+            1 - params.get(key="p_health_pHCCI", index=int(cycle // 5 * 5)) - params.get(key="p_Death", index=cycle) - params.get(
+                key="p_health_CHB", index=int(cycle // 5 * 5))
 
     )
     # endregion
@@ -865,7 +869,7 @@ def my_treeage_shaicha():
     )
     CHB_shaicha.add_transition(
         pre_ps_HCCI_1,
-        probability_func=lambda cycle, p: params.get(key="p_HBV_pHCCI", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_HBV_pHCCI", index=int(cycle // 5 * 5))
     )
     CHB_shaicha.add_transition(
         death,
@@ -874,7 +878,7 @@ def my_treeage_shaicha():
     CHB_shaicha.add_transition(
         CHB,
         probability_func=lambda cycle, p: \
-            1 - params.get(key="p_Death", index=cycle) - params.get(key="p_HBV_pHCCI", index=cycle) - params.get(key="p_HBV_CC", index=cycle)
+            1 - params.get(key="p_Death", index=cycle) - params.get(key="p_HBV_pHCCI", index=int(cycle // 5 * 5)) - params.get(key="p_HBV_CC", index=cycle)
     )
     # endregion
     # region ===== CHB不筛查分支 =====
@@ -884,7 +888,7 @@ def my_treeage_shaicha():
     )
     CHB_noshaicha.add_transition(
         pHCCI,
-        probability_func=lambda cycle, p: params.get(key="p_HBV_pHCCI", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_HBV_pHCCI", index=int(cycle // 5 * 5))
     )
     CHB_noshaicha.add_transition(
         death,
@@ -893,7 +897,7 @@ def my_treeage_shaicha():
     CHB_noshaicha.add_transition(
         CHB,
         probability_func=lambda cycle, p: \
-            1 - params.get(key="p_Death", index=cycle) - params.get(key="p_HBV_pHCCI", index=cycle) - params.get(
+            1 - params.get(key="p_Death", index=cycle) - params.get(key="p_HBV_pHCCI", index=int(cycle // 5 * 5)) - params.get(
                 key="p_HBV_CC", index=cycle)
     )
     # endregion
@@ -943,7 +947,7 @@ def my_treeage_shaicha():
     )
     pCC_shaicha.add_transition(
         pCC_stemp3,
-        probability_func=lambda cycle, p: params.get(key="p_CC_pHCCI", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_CC_PHCCI", index=cycle)
     )
     pCC_shaicha.add_transition(
         pCC_stemp2,
@@ -951,7 +955,7 @@ def my_treeage_shaicha():
     )
     pCC_shaicha.add_transition(
         pCC_stemp1,
-        probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_CC_pHCCI", index=cycle) - params.get(key="p_CC_DCC", index=cycle)
+        probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_CC_PHCCI", index=cycle) - params.get(key="p_CC_DCC", index=cycle)
     )
     # endregion
     # region ===== pCC 不筛查分支 =====
@@ -960,6 +964,14 @@ def my_treeage_shaicha():
         name="pCC_ns",
         description="pCC_ns",
         is_temporary=True
+    )
+    pCC_noshaicha.add_transition(
+        death,
+        probability_func=lambda cycle, p: params.get(key="p_Death", index=cycle)
+    )
+    pCC_noshaicha.add_transition(
+        pCC_ns_live,
+        probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle)
     )
     pCC_ns_fx = State(
         name="pCC_ns_fx",
@@ -973,7 +985,7 @@ def my_treeage_shaicha():
     )
     pCC_ns_fx_nt.add_transition(
         pHCCI,
-        probability_func=lambda cycle, p: params.get(key="p_CC_pHCCI", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_CC_PHCCI", index=cycle)
     )
     pCC_ns_fx_nt.add_transition(
         DCC,
@@ -981,7 +993,7 @@ def my_treeage_shaicha():
     )
     pCC_ns_fx_nt.add_transition(
         CC,
-        probability_func=lambda cycle, p: 1 - params.get(key="p_CC_DCC", index=cycle) - params.get(key="p_CC_pHCCI", index=cycle)
+        probability_func=lambda cycle, p: 1 - params.get(key="p_CC_DCC", index=cycle) - params.get(key="p_CC_PHCCI", index=cycle)
     )
     pCC_ns_fx.add_transition(
         pCC_ns_fx_nt,
@@ -998,7 +1010,7 @@ def my_treeage_shaicha():
     )
     pCC_ns_nfx.add_transition(
         pHCCI,
-        probability_func=lambda cycle, p: params.get(key="p_CC_pHCCI", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_CC_PHCCI", index=cycle)
     )
     pCC_ns_nfx.add_transition(
         pDCC,
@@ -1007,7 +1019,7 @@ def my_treeage_shaicha():
     pCC_ns_nfx.add_transition(
         pCC,
         probability_func=lambda cycle, p: 1 - params.get(key="p_CC_DCC", index=cycle) - params.get(
-            key="p_CC_pHCCI", index=cycle)
+            key="p_CC_PHCCI", index=cycle)
     )
     pCC_ns_live.add_transition(
         pCC_ns_fx,
@@ -1051,11 +1063,11 @@ def my_treeage_shaicha():
     )
     pDCC_shaicha.add_transition(
         pDCC_stemp2,
-        probability_func=lambda cycle, p: params.get(key="p_DCC_pHCCI", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_DCC_PHCCI", index=cycle)
     )
     pDCC_shaicha.add_transition(
         pDCC_stemp1,
-        probability_func=lambda cycle, p: 1 - params.get(key="p_DCC_pHCCI", index=cycle) - params.get(key="p_Death", index=cycle)
+        probability_func=lambda cycle, p: 1 - params.get(key="p_DCC_PHCCI", index=cycle) - params.get(key="p_Death", index=cycle)
     )
     # endregion
     # region ===== pDCC 不筛查分支 =====
@@ -1077,11 +1089,11 @@ def my_treeage_shaicha():
     )
     pDCC_ns_live_fx_nt.add_transition(
         pHCCI,
-        probability_func=lambda cycle, p: params.get(key="p_DCC_pHCCI", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_DCC_PHCCI", index=cycle)
     )
     pDCC_ns_live_fx_nt.add_transition(
         DCC,
-        probability_func=lambda cycle, p: 1 - params.get(key="p_DCC_pHCCI", index=cycle)
+        probability_func=lambda cycle, p: 1 - params.get(key="p_DCC_PHCCI", index=cycle)
     )
     pDCC_ns_live_fx.add_transition(
         tDCC,
@@ -1098,11 +1110,11 @@ def my_treeage_shaicha():
     )
     pDCC_ns_live_nfx.add_transition(
         pHCCI,
-        probability_func=lambda cycle, p: params.get(key="p_DCC_pHCCI", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_DCC_PHCCI", index=cycle)
     )
     pDCC_ns_live_nfx.add_transition(
         DCC,
-        probability_func=lambda cycle, p: 1 - params.get(key="p_DCC_pHCCI", index=cycle)
+        probability_func=lambda cycle, p: 1 - params.get(key="p_DCC_PHCCI", index=cycle)
     )
     pDCC_ns_live.add_transition(
         pDCC_ns_live_fx,
@@ -1167,7 +1179,7 @@ def my_treeage_shaicha():
     )
     pHCCI_shaicha.add_transition(
         pHCCI_ns_to_cI,
-        probability_func=lambda cycle, p: params.get(key="p_HCCI_Detected", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_HCCI_Detected", index=int(cycle // 5 * 5))
     )
     pHCCI_shaicha.add_transition(
         pHCCI_ns_to_pII,
@@ -1175,7 +1187,7 @@ def my_treeage_shaicha():
     )
     pHCCI_shaicha.add_transition(
         pHCCI_ns_stay,
-        probability_func=lambda cycle, p: 1 - params.get(key="p_HCCI_HCCII", index=cycle) - params.get(key="p_HCCI_Detected", index=cycle) - params.get(key="p_Death", index=cycle)
+        probability_func=lambda cycle, p: 1 - params.get(key="p_HCCI_HCCII", index=cycle) - params.get(key="p_HCCI_Detected", index=int(cycle // 5 * 5)) - params.get(key="p_Death", index=cycle)
     )
     # endregion
     # region ===== 临床前I期不筛查分支 =====
@@ -1189,11 +1201,11 @@ def my_treeage_shaicha():
     )
     pHCCI_noshaicha.add_transition(
         cHCCI,
-        probability_func=lambda cycle, p: params.get(key="p_HCCI_Detected", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_HCCI_Detected", index=int(cycle // 5 * 5))
     )
     pHCCI_noshaicha.add_transition(
         pHCCI,
-        probability_func=lambda cycle, p: 1 - params.get(key="p_HCCI_Detected", index=cycle) - params.get(key="p_HCCI_HCCII", index=cycle) - params.get(key="p_Death", index=cycle)
+        probability_func=lambda cycle, p: 1 - params.get(key="p_HCCI_Detected", index=int(cycle // 5 * 5)) - params.get(key="p_HCCI_HCCII", index=cycle) - params.get(key="p_Death", index=cycle)
     )
     # endregion
     # region ===== 临床前II期筛查分支 =====
@@ -1242,7 +1254,7 @@ def my_treeage_shaicha():
     )
     pHCCII_shaicha.add_transition(
         pHCCII_ns_to_cII,
-        probability_func=lambda cycle, p: params.get(key="p_HCCII_Detected", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_HCCII_Detected", index=int(cycle // 5 * 5))
     )
     pHCCII_shaicha.add_transition(
         pHCCII_ns_to_pIII,
@@ -1251,7 +1263,7 @@ def my_treeage_shaicha():
     pHCCII_shaicha.add_transition(
         pHCCII_ns_stay,
         probability_func=lambda cycle, p: 1 - params.get(key="p_HCCII_HCCIII", index=cycle) - params.get(
-            key="p_HCCII_Detected", index=cycle) - params.get(key="p_Death", index=cycle)
+            key="p_HCCII_Detected", index=int(cycle // 5 * 5)) - params.get(key="p_Death", index=cycle)
     )
     # endregion
     # region ===== 临床前II期不筛查分支 =====
@@ -1265,11 +1277,11 @@ def my_treeage_shaicha():
     )
     pHCCII_noshaicha.add_transition(
         cHCCII,
-        probability_func=lambda cycle, p: params.get(key="p_HCCII_Detected", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_HCCII_Detected", index=int(cycle // 5 * 5))
     )
     pHCCII_noshaicha.add_transition(
         pHCCII,
-        probability_func=lambda cycle, p: 1 - params.get(key="p_HCCII_Detected", index=cycle) - params.get(
+        probability_func=lambda cycle, p: 1 - params.get(key="p_HCCII_Detected", index=int(cycle // 5 * 5)) - params.get(
             key="p_HCCII_HCCIII", index=cycle) - params.get(key="p_Death", index=cycle)
     )
     # endregion
@@ -1319,7 +1331,7 @@ def my_treeage_shaicha():
     )
     pHCCIII_shaicha.add_transition(
         pHCCIII_ns_to_cIII,
-        probability_func=lambda cycle, p: params.get(key="p_HCCIII_Detected", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_HCCIII_Detected", index=int(cycle // 5 * 5))
     )
     pHCCIII_shaicha.add_transition(
         pHCCIII_ns_to_pIV,
@@ -1328,7 +1340,7 @@ def my_treeage_shaicha():
     pHCCIII_shaicha.add_transition(
         pHCCIII_ns_stay,
         probability_func=lambda cycle, p: 1 - params.get(key="p_HCCIII_HCCIV", index=cycle) - params.get(
-            key="p_HCCIII_Detected", index=cycle) - params.get(key="p_Death", index=cycle)
+            key="p_HCCIII_Detected", index=int(cycle // 5 * 5)) - params.get(key="p_Death", index=cycle)
     )
     # endregion
     # region ===== 临床前III期不筛查分支 =====
@@ -1342,11 +1354,11 @@ def my_treeage_shaicha():
     )
     pHCCIII_noshaicha.add_transition(
         cHCCIII,
-        probability_func=lambda cycle, p: params.get(key="p_HCCIII_Detected", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_HCCIII_Detected", index=int(cycle // 5 * 5))
     )
     pHCCIII_noshaicha.add_transition(
         pHCCIII,
-        probability_func=lambda cycle, p: 1 - params.get(key="p_HCCIII_Detected", index=cycle) - params.get(
+        probability_func=lambda cycle, p: 1 - params.get(key="p_HCCIII_Detected", index=int(cycle // 5 * 5)) - params.get(
             key="p_HCCIII_HCCIV", index=cycle) - params.get(key="p_Death", index=cycle)
     )
     # endregion
@@ -1383,11 +1395,11 @@ def my_treeage_shaicha():
     )
     pHCCIV_shaicha.add_transition(
         pHCCIV_s_to_cIV,
-        probability_func=lambda cycle, p: params.get(key="p_HCCIV_Detected", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_HCCIV_Detected", index=int(cycle // 5 * 5))
     )
     pHCCIV_shaicha.add_transition(
         pHCCIV_s_stay,
-        probability_func=lambda cycle, p: 1 - params.get(key="p_HCCIV_Detected", index=cycle) - params.get(key="p_Death", index=cycle)
+        probability_func=lambda cycle, p: 1 - params.get(key="p_HCCIV_Detected", index=int(cycle // 5 * 5)) - params.get(key="p_Death", index=cycle)
     )
     # endregion
     # region ===== 临床前IV期不筛查分支 =====
@@ -1397,11 +1409,11 @@ def my_treeage_shaicha():
     )
     pHCCIV_noshaicha.add_transition(
         cHCCIV,
-        probability_func=lambda cycle, p: params.get(key="p_HCCIV_Detected", index=cycle)
+        probability_func=lambda cycle, p: params.get(key="p_HCCIV_Detected", index=int(cycle // 5 * 5))
     )
     pHCCIV_noshaicha.add_transition(
         pHCCIV,
-        probability_func=lambda cycle, p: 1 - params.get(key="p_HCCIV_Detected", index=cycle) - params.get(
+        probability_func=lambda cycle, p: 1 - params.get(key="p_HCCIV_Detected", index=int(cycle // 5 * 5)) - params.get(
             key="p_Death", index=cycle)
     )
     # endregion
@@ -1573,4 +1585,122 @@ def my_treeage_shaicha():
         probability_func=lambda cycle, p: 1 - params.get(key="p_DCC_Death", index=cycle) - params.get(key="p_Death", index=cycle)
     )
     # endregion
+    # region ===== tCC 分支 =====
+    tCC.add_tunnel_transition(
+        cured,
+        probability_func=lambda cycle, p: 0.079
+    )
+    tCC.add_tunnel_transition(
+        death,
+        probability_func=lambda cycle, p: params.get(key="p_Death", index=cycle)
+    )
+    tCC.add_tunnel_transition(
+        tCC,
+        probability_func=lambda cycle, p: 1 - 0.079 - params.get(key="p_Death", index=cycle)
+    )
+    tCC_live = State(
+        name="tCC_live",
+        description="tCC_live",
+        is_temporary=True
+    )
+    tCC_live.add_transition(
+        pHCCI,
+        probability_func=lambda cycle, p: params.get(key="p_CC_PHCCI_treat", index=cycle)
+    )
+    tCC_live.add_transition(
+        DCC,
+        probability_func=lambda cycle, p: params.get(key="p_CC_DCC_treat", index=cycle)
+    )
+    tCC.add_transition(
+        death_cc,
+        probability_func=lambda cycle, p: params.get(key="p_CC_Death_treat", index=cycle)
+    )
+    tCC.add_transition(
+        death,
+        probability_func=lambda cycle, p: params.get(key="p_Death", index=cycle)
+    )
+    tCC.add_transition(
+        tCC_live,
+        probability_func=lambda cycle, p: 1 - params.get(key="p_CC_Death_treat", index=cycle) - params.get(key="p_Death", index=cycle)
+    )
+    # endregion
+    # region ===== tDCC 分支 =====
+    tDCC.add_tunnel_transition(
+        cured,
+        probability_func=lambda cycle, p: 0.033
+    )
+    tDCC.add_tunnel_transition(
+        death,
+        probability_func=lambda cycle, p: params.get(key="p_Death", index=cycle)
+    )
+    tDCC.add_tunnel_transition(
+        tDCC,
+        probability_func=lambda cycle, p: 1 - 0.033 - params.get(key="p_Death", index=cycle)
+    )
+    tDCC_live = State(
+        name="tDCC_live",
+        description="tDCC_live",
+        is_temporary=True
+    )
+    tDCC_live.add_transition(
+        pHCCI,
+        probability_func=lambda cycle, p: params.get(key="p_DCC_PHCCI_treat", index=cycle)
+    )
+    tDCC_live.add_transition(
+        tDCC,
+        probability_func=lambda cycle, p: 1 - params.get(key="p_DCC_PHCCI_treat", index=cycle)
+    )
+    tDCC.add_transition(
+        death,
+        probability_func=lambda cycle, p: params.get(key="p_Death", index=cycle)
+    )
+    tDCC.add_transition(
+        death_dcc,
+        probability_func=lambda cycle, p: params.get(key="p_DCC_Death_treat", index=cycle)
+    )
+    tDCC.add_transition(
+        tDCC_live,
+        probability_func=lambda cycle, p: 1 - params.get(key="p_DCC_Death_treat", index=cycle) - params.get(key="p_Death", index=cycle)
+    )
+    # endregion
+    model = MarkovModel(
+        states=[
+            death, death_dcc, death_hcc, death_cc,
+            Healthy, health_shaicha, health_noshaicha,
+            CHB, CHB_shaicha, CHB_noshaicha,
+            pCC, pCC_shaicha, pCC_noshaicha,
+            pDCC, pDCC_shaicha, pDCC_noshaicha,
+            pHCCI, pHCCI_shaicha, pHCCI_noshaicha,
+            pHCCII, pHCCII_shaicha, pHCCII_noshaicha,
+            pHCCIII, pHCCIII_shaicha, pHCCIII_noshaicha,
+            pHCCIV, pHCCIV_shaicha, pHCCIV_noshaicha,
+            cHCCI, cHCCII, cHCCIII, cHCCIV,
+            sHCCI, sHCCII, sHCCIII, sHCCIV,
+            sCC, sDCC, CC, DCC, tCC, tDCC,
+            cured,
+            pre_ps_HCCI,
+            pre_ps_CC, pre_ps_HCCI_1,
+            pCC_stemp1, pCC_stemp2, pCC_stemp3,
+            pCC_ns_live, pCC_ns_fx, pCC_ns_fx_nt, pCC_ns_nfx,
+            pDCC_stemp1, pDCC_stemp2,
+            pDCC_ns_live, pDCC_ns_live_fx, pDCC_ns_live_fx_nt, pDCC_ns_live_nfx,
+            pHCCI_ns_stay, pHCCI_ns_to_pII, pHCCI_ns_to_cI,
+            pHCCII_ns_stay, pHCCII_ns_to_pIII, pHCCII_ns_to_cII,
+            pHCCIII_ns_stay, pHCCIII_ns_to_pIV, pHCCIII_ns_to_cIII,
+            pHCCIV_s_stay, pHCCIV_s_to_cIV,
+            sCC_live, sCC_live_nt,
+            sDCC_live, sDCC_live_nt,
+            CC_live, CC_live_nt,
+            DCC_live, DCC_live_nt,
+            tCC_live,
+            tDCC_live,
 
+        ],
+        initial_distribution={"Healthy": 100000}
+    )
+    model.run(cycles=84, params=params, cohort=True)
+    print(f"最终状态分布: {model.results['state_counts'][-1]}")
+
+
+if __name__ == "__main__":
+    my_treeage_shaicha()
