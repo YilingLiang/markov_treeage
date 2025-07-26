@@ -65,13 +65,13 @@ if __name__ == "__main__":
     healthy.add_transition(
         diagnosis,
         probability_func=lambda cycle, p: 0.1,
-        condition=create_condition(max_cycle=50)  # 前50个周期走诊断路径
+        condition=create_condition(max_cycle=2)  # 前50个周期走诊断路径
     )
 
     healthy.add_transition(
         treatment,
         probability_func=lambda cycle, p: 0.1,
-        condition=create_condition(min_cycle=50)  # 50个周期后走治疗路径
+        condition=create_condition(min_cycle=2)  # 50个周期后走治疗路径
     )
 
     healthy.add_transition(
@@ -136,8 +136,7 @@ if __name__ == "__main__":
     print(f"从诊断到死亡的累积转移: {model.get_cumulative_edge_transitions('Diagnosis', 'Death'):.2f}")
     print(f"从疾病到死亡的累积转移: {model.get_cumulative_edge_transitions('Disease', 'Death'):.2f}")
     print(f"从治疗到死亡的累积转移: {model.get_cumulative_edge_transitions('Treatment', 'Death'):.2f}")
-    print(f"前5次状态分布: {model.results['state_counts'][:5]}")
-    print(f"最终状态分布: {model.results['state_counts'][-1]}")
+    print(f"状态分布: {model.results['state_counts']}")
 
     # 可视化状态分布随时间的变化
     plt.figure(figsize=(12, 6))

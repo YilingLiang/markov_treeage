@@ -356,12 +356,16 @@ if __name__ == "__main__":
         name="Treatment",
         description="治疗中",
         is_temporary=True,
+        cost_func=lambda cycle, p: 2000,
+        utility_func=lambda cycle, p: 1
     )
 
     diagnosis = State(
         name="Diagnosis",
         description="诊断中",
         is_temporary=True,
+        cost_func=lambda cycle, p: 2000,
+        utility_func=lambda cycle, p: 1
     )
 
     # 定义状态转移
@@ -374,13 +378,13 @@ if __name__ == "__main__":
     healthy.add_transition(
         diagnosis,
         probability_func=lambda cycle, p: 0.1,
-        condition=create_condition(max_cycle=50)  # 前50个周期走诊断路径
+        condition=create_condition(max_cycle=11)  # 前50个周期走诊断路径
     )
 
     healthy.add_transition(
         treatment,
         probability_func=lambda cycle, p: 0.1,
-        condition=create_condition(min_cycle=50)  # 50个周期后走治疗路径
+        condition=create_condition(min_cycle=11)  # 50个周期后走治疗路径
     )
 
     healthy.add_transition(
@@ -429,11 +433,11 @@ if __name__ == "__main__":
     # 初始化模型
     model = MarkovModel(
         states=[healthy, disease, death, treatment, diagnosis],
-        initial_distribution={"Healthy": 1.0, "Disease": 0.0, "Death": 0.0, "Treatment": 0.0, "Diagnosis": 0.0}
+        initial_distribution={"Healthy": 1.0}
     )
 
     # 运行模型
-    model.run(cycles=10, params=params, cohort=True)
+    model.run(cycles=15, params=params, cohort=True)
 
     # 分析结果
     print(f"每个时间步的成本与效用：\n{model.results['stage_costs']}\n{model.results['stage_utilities']}")

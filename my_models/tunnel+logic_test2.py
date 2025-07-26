@@ -30,16 +30,24 @@ if __name__ == "__main__":
         cost_func=lambda cycle, p: 2000,
         utility_func=lambda cycle, p: 0.7,
         tunnel_cycle=4,
-        # tunnel_transitions=[(
-        #     death,
-        #     lambda cycle, p: 0.2
-        # )]
     )
-    # 疾病状态转移
-    disease.add_transition(
-        healthy,
-        probability_func=lambda cycle, p: 0.6
-    )
+    # dtmp1 = State(
+    #     name="Dtmp1",
+    #     is_temporary=True
+    # )
+    # dtmp2 = State(
+    #     name="Dtmp2",
+    #     is_temporary=True
+    # )
+    # # 疾病状态转移
+    # disease.add_transition(
+    #     dtmp1,
+    #     probability_func=lambda cycle, p: 0.6
+    # )
+    # disease.add_transition(
+    #     dtmp2,
+    #     probability_func=lambda cycle, p: 0.6
+    # )
 
     disease.add_transition(
         disease,
@@ -123,6 +131,17 @@ if __name__ == "__main__":
         probability_func=lambda cycle, p: 0.01  # 治疗中死亡
     )
 
+    disease.add_transition(
+        diagnosis,
+        probability_func=lambda cycle, p: 0.6,
+        condition=create_condition(max_cycle=50)  # 前50个周期走诊断路径
+    )
+    disease.add_transition(
+        treatment,
+        probability_func=lambda cycle, p: 0.6,
+        condition=create_condition(min_cycle=50)  # 50个周期后走治疗路径
+    )
+
     # 初始化模型
     model = MarkovModel(
         states=[healthy, disease, death, treatment, diagnosis],
@@ -130,7 +149,7 @@ if __name__ == "__main__":
     )
 
     # 运行模型
-    model.run(cycles=50, params=params, cohort=True)
+    model.run(cycles=10, params=params, cohort=True)
 
     # 分析结果
     print(f"每个时间步的成本与效用：\n{model.results['stage_costs']}\n{model.results['stage_utilities']}")
