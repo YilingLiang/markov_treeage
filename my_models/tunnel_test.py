@@ -1,4 +1,4 @@
-from lab.markov_tunnel_db_v5 import MarkovModel, State, discount
+from lab.markov_tunnel_db_v5 import MarkovModel, State
 import numpy as np
 import matplotlib.pyplot as plt
 
