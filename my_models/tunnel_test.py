@@ -1,12 +1,6 @@
-from lab.markov_tunnel_db_v4 import MarkovModel, State, discount
-from lab.condition import create_condition
-from parameter.define_parameters import Parameters
-from lab.plot_markov import visualize_markov_model
-from parameter.define_tables import Table
+from lab.markov_tunnel_db_v5 import MarkovModel, State, discount
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
-from typing import Dict, List, Callable, Tuple, Union, Optional, Any
 
 
 if __name__ == "__main__":
@@ -62,7 +56,6 @@ if __name__ == "__main__":
     print(f"从疾病到死亡的累积转移: {model.get_cumulative_edge_transitions('Disease', 'Death'):.2f}")
     print(f"最终状态分布: {model.results['state_counts'][-1]}")
     print(f"每个时间步状态分布: {model.results['state_counts']}")
-    print(f"每个时间步的成本和效用: \n{model.results['stage_costs']}\n{model.results['stage_utilities']}")
 
     # 查看停留时间分布
     print("\n健康状态的停留时间分布:")

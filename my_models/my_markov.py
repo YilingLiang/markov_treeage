@@ -1,6 +1,6 @@
 import numpy as np
 
-from lab.markov_tunnel_db_v4 import MarkovModel, State, discount
+from lab.markov_tunnel_db_v5 import MarkovModel, State, discount
 from lab.condition import create_condition, create_condition_gq_leq
 from parameter.define_parameters import Parameters
 from parameter.define_tables import Table
@@ -1736,10 +1736,6 @@ def my_treeage_shaicha():
     plt.legend()
     plt.grid(True)
     plt.show()
-
-    # nn = 0
-    # print(params.get(key="p_health_CHB", index=int(nn // 5)*5), params.get(key="p_health_pHCCI", index=int(nn // 5)*5), params.get(key="p_Death", index=int(nn // 5)*5),
-    #       1 - params.get(key="p_health_CHB", index=int(nn // 5)*5) - params.get(key="p_health_pHCCI", index=int(nn // 5)*5) - params.get(key="p_Death", index=int(nn // 5)*5))
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-from lab.markov5 import MarkovModel, State, discount, create_condition_gq_leq, create_condition
+from lab.markov_tunnel_db_v5 import MarkovModel, State, discount, create_condition_gq_leq, create_condition
 from parameter.define_parameters import Parameters
 from parameter.define_tables import Table
 import numpy as np

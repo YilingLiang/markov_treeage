@@ -1,6 +1,4 @@
-from lab.markov5 import MarkovModel, State, discount, create_condition_gq_leq, create_condition
-from parameter.define_parameters import Parameters
-from lab.plot_markov import visualize_markov_model
+from lab.markov_tunnel_db_v5 import MarkovModel, State
 import matplotlib.pyplot as plt
 
 
@@ -45,12 +43,6 @@ if __name__ == "__main__":
     model = MarkovModel([healthy, disease, death], {"Healthy": 1.0})
     model.run(10, {"dr": 0.00})
 
-    # 可视化结果
-    graph = visualize_markov_model(model, current_cycle=3)
-    graph.render('markov_model', view=True)
-
-    print(model.results["state_counts"])
-
     # 分析结果
     print(f"总成本: {model.results['total_cost']:.2f}")
     print(f"总效用: {model.results['total_utility']:.2f}")
@@ -58,8 +50,19 @@ if __name__ == "__main__":
     # 查看特定边的累积转移
     print(f"从健康到死亡的累积转移: {model.get_cumulative_edge_transitions('Healthy', 'Death'):.2f}")
     print(f"从疾病到死亡的累积转移: {model.get_cumulative_edge_transitions('Disease', 'Death'):.2f}")
-    print(f"前5次状态分布: {model.results['state_counts'][:5]}")
     print(f"最终状态分布: {model.results['state_counts'][-1]}")
+    print(f"每个时间步状态分布: {model.results['state_counts']}")
+
+    # 查看停留时间分布
+    print("\n健康状态的停留时间分布:")
+    for t in range(5):
+        dist = model.get_dwell_time_distribution('Healthy', t)
+        print(f"周期 {t}: {[f'{x:.4f}' for x in dist]}")
+
+    print("\n疾病状态的停留时间分布:")
+    for t in range(5):
+        dist = model.get_dwell_time_distribution('Disease', t)
+        print(f"周期 {t}: {[f'{x:.4f}' for x in dist]}")
 
     # 可视化状态分布随时间的变化
     plt.figure(figsize=(12, 6))
@@ -74,21 +77,30 @@ if __name__ == "__main__":
     plt.grid(True)
     plt.show()
 
-    # 可视化边转移数量
-    plt.figure(figsize=(14, 8))
-    edges_to_plot = [
-        ("Healthy", "Death"),
-        ("Disease", "Death")
-    ]
+    # 可视化健康状态的停留时间分布
+    plt.figure(figsize=(12, 6))
+    healthy_idx = model._get_state_index('Healthy')
+    max_dwell = healthy.tunnel_cycle if healthy.tunnel_cycle is not None else 0
+    for dwell_time in range(max_dwell + 1):
+        dwell_dist = [model.dwell_time_distributions[t][healthy_idx, dwell_time] for t in range(11)]
+        plt.plot(time_points, dwell_dist, label=f"停留{dwell_time}周期")
+    plt.xlabel("周期")
+    plt.ylabel("比例")
+    plt.title("健康状态的停留时间分布")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
 
-    for i, (from_state, to_state) in enumerate(edges_to_plot, 1):
-        plt.subplot(2, 3, i)
-        transitions = model.get_edge_transitions(from_state, to_state)
-        plt.plot(range(1, 11), transitions)
-        plt.title(f"{from_state} → {to_state}")
-        plt.xlabel("周期")
-        plt.ylabel("转移数量")
-        plt.grid(True)
-
-    plt.tight_layout()
+    # 可视化疾病状态的停留时间分布
+    plt.figure(figsize=(12, 6))
+    disease_idx = model._get_state_index('Disease')
+    max_dwell = disease.tunnel_cycle if disease.tunnel_cycle is not None else 0
+    for dwell_time in range(max_dwell + 1):
+        dwell_dist = [model.dwell_time_distributions[t][disease_idx, dwell_time] for t in range(11)]
+        plt.plot(time_points, dwell_dist, label=f"停留{dwell_time}周期")
+    plt.xlabel("周期")
+    plt.ylabel("比例")
+    plt.title("疾病状态的停留时间分布")
+    plt.legend()
+    plt.grid(True)
     plt.show()
