@@ -288,12 +288,12 @@ class MarkovModel:
 
                     if not from_state.is_temporary and not from_state.is_absorbing:
                         # 当前状态的成本和效用（状态本身）
-                        cost = from_state.cost_func(t + 1, params)
-                        utility = from_state.utility_func(t + 1, params)
+                        cost = from_state.cost_func(t, params)
+                        utility = from_state.utility_func(t, params)
 
                         # 应用折扣
-                        discounted_cost = discount(cost, params.get("dr", 0), t + 1)
-                        discounted_utility = discount(utility, params.get("dr", 0), t + 1)
+                        discounted_cost = discount(cost, params.get("dr", 0), t)
+                        discounted_utility = discount(utility, params.get("dr", 0), t)
 
                         # 累计状态本身的成本和效用
                         cycle_state_cost += population * discounted_cost
@@ -322,7 +322,7 @@ class MarkovModel:
 
                         # 使用强制转移规则
                         for to_state, prob_func, trans_cost_func, trans_utility_func in from_state.tunnel_transitions:
-                            prob = prob_func(t + 1, params)
+                            prob = prob_func(t, params)
                             transferred_pop = population * prob
 
                             # 记录边转移数量
@@ -330,12 +330,12 @@ class MarkovModel:
                             edge_counts[t, edge_id] += transferred_pop
 
                             # 计算转移过程的成本和效用
-                            trans_cost = trans_cost_func(t + 1, params)
-                            trans_utility = trans_utility_func(t + 1, params)
+                            trans_cost = trans_cost_func(t, params)
+                            trans_utility = trans_utility_func(t, params)
 
                             # 应用折扣
-                            discounted_trans_cost = discount(trans_cost, params.get("dr", 0), t + 1)
-                            discounted_trans_utility = discount(trans_utility, params.get("dr", 0), t + 1)
+                            discounted_trans_cost = discount(trans_cost, params.get("dr", 0), t)
+                            discounted_trans_utility = discount(trans_utility, params.get("dr", 0), t)
 
                             # 累计转移成本和效用
                             trans_total_cost = transferred_pop * discounted_trans_cost
@@ -406,7 +406,7 @@ class MarkovModel:
                         # 处理每个适用的转移
                         for transition in applicable_transitions:
                             to_state = transition["to_state"]
-                            prob = transition["probability_func"](t + 1, params)
+                            prob = transition["probability_func"](t, params)
                             transferred_pop = population * prob
 
                             # 记录边转移数量
@@ -414,10 +414,10 @@ class MarkovModel:
                             edge_counts[t, edge_id] += transferred_pop
 
                             # 计算转移动作的成本和效用（如从健康到患病的诊断费）
-                            trans_cost = transition["transition_cost_func"](t + 1, params)
-                            trans_utility = transition["transition_utility_func"](t + 1, params)
-                            discounted_trans_cost = discount(trans_cost, params.get("dr", 0), t + 1)
-                            discounted_trans_utility = discount(trans_utility, params.get("dr", 0), t + 1)
+                            trans_cost = transition["transition_cost_func"](t, params)
+                            trans_utility = transition["transition_utility_func"](t, params)
+                            discounted_trans_cost = discount(trans_cost, params.get("dr", 0), t)
+                            discounted_trans_utility = discount(trans_utility, params.get("dr", 0), t)
 
                             # 累计转移动作成本和效用
                             cycle_transition_cost += transferred_pop * discounted_trans_cost
