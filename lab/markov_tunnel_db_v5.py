@@ -286,11 +286,7 @@ class MarkovModel:
                     if population <= 0:
                         continue
 
-                    # 如果是吸收态，直接转移到下一周期
-                    if from_state.is_absorbing:
-                        next_state[state_idx] += population
-                        next_dwell[state_idx, min(dwell_time + 1, max_stay)] += population
-
+                    if not from_state.is_temporary and not from_state.is_absorbing:
                         # 当前状态的成本和效用（状态本身）
                         cost = from_state.cost_func(t + 1, params)
                         utility = from_state.utility_func(t + 1, params)
@@ -302,6 +298,11 @@ class MarkovModel:
                         # 累计状态本身的成本和效用
                         cycle_state_cost += population * discounted_cost
                         cycle_state_utility += population * discounted_utility
+
+                    # 如果是吸收态，直接转移到下一周期
+                    if from_state.is_absorbing:
+                        next_state[state_idx] += population
+                        next_dwell[state_idx, min(dwell_time + 1, max_stay)] += population
 
                         continue
 
