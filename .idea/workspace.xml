@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="468a0ab0-0559-4547-88ee-1e74df27889f" name="Changes" comment="" />
+    <list default="true" id="468a0ab0-0559-4547-88ee-1e74df27889f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/lab/markov_tunnel_simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab/markov_tunnel_simple.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my_models/demo_0902_no_tunnel.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_models/demo_0902_no_tunnel.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,7 +35,9 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Python.demo_0902.executor": "Run",
+    "Python.demo_0902_no_tunnel.executor": "Run",
     "Python.logic_test.executor": "Run",
+    "Python.markov_disease.executor": "Run",
     "Python.my_markov.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
@@ -49,9 +54,10 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\Y9000Xde\Codes\Python\markov_treeage\my_models" />
+      <recent name="E:\Y9000Xde\Codes\Python\markov_treeage\lab" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.demo_0902">
+  <component name="RunManager" selected="Python.markov_disease">
     <configuration name="demo_0902" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="markov_treeage" />
       <option name="ENV_FILES" value="" />
@@ -75,6 +81,29 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="demo_0902_no_tunnel" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="markov_treeage" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/my_models" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/my_models/demo_0902_no_tunnel.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="logic_test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="markov_treeage" />
       <option name="ENV_FILES" value="" />
@@ -90,6 +119,29 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/my_models/logic_test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="markov_disease" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="markov_treeage" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/my_models" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/my_models/markov_disease.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -123,8 +175,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.demo_0902" />
+        <item itemvalue="Python.markov_disease" />
         <item itemvalue="Python.logic_test" />
+        <item itemvalue="Python.demo_0902_no_tunnel" />
+        <item itemvalue="Python.demo_0902" />
         <item itemvalue="Python.my_markov" />
       </list>
     </recent_temporary>
@@ -148,6 +202,7 @@
       <workItem from="1755958610940" duration="1635000" />
       <workItem from="1756647653777" duration="9031000" />
       <workItem from="1756812433414" duration="8122000" />
+      <workItem from="1756821734594" duration="11356000" />
     </task>
     <servers />
   </component>
@@ -155,8 +210,10 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/markov_treeage$demo_0902.coverage" NAME="demo_0902 Coverage Results" MODIFIED="1756820693047" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_models" />
+    <SUITE FILE_PATH="coverage/markov_treeage$demo_0902_no_tunnel.coverage" NAME="demo_0902_no_tunnel Coverage Results" MODIFIED="1756828962371" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_models" />
+    <SUITE FILE_PATH="coverage/markov_treeage$demo_0902.coverage" NAME="demo_0902 Coverage Results" MODIFIED="1756823234365" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_models" />
     <SUITE FILE_PATH="coverage/markov_treeage$my_markov.coverage" NAME="my_markov Coverage Results" MODIFIED="1756814589361" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_models" />
-    <SUITE FILE_PATH="coverage/markov_treeage$logic_test.coverage" NAME="logic_test Coverage Results" MODIFIED="1756816183657" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_models" />
+    <SUITE FILE_PATH="coverage/markov_treeage$markov_disease.coverage" NAME="markov_disease Coverage Results" MODIFIED="1756830864618" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_models" />
+    <SUITE FILE_PATH="coverage/markov_treeage$logic_test.coverage" NAME="logic_test Coverage Results" MODIFIED="1756829357144" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/my_models" />
   </component>
 </project>

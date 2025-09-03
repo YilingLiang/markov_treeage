@@ -3,7 +3,7 @@
 """
 import numpy as np
 
-from lab.markov_tunnel_simple import MarkovModel, State, discount
+from lab.markov_simple import MarkovModel, State
 from lab.condition import create_condition, create_condition_gq_leq
 from parameter.define_parameters import Parameters
 from parameter.define_tables import Table
@@ -384,17 +384,14 @@ def my_treeage_shaicha():
     from my_models.my_utils.utility import health_utility_func
     Healthy = State(
         name="Healthy",
-        description="健康",
-        utility_func=lambda cycle, p: health_utility_func(params.U_health, params.DR, cycle),
+        description="健康"
     )
     # endregion
 
     # region ===== CHB慢性乙肝感染 =====
     CHB = State(
         name="CHB",
-        description="慢性乙肝感染",
-        cost_func=lambda cycle, p: 0,
-        utility_func=lambda cycle, p: discount(params.U_health, params.DR, cycle)
+        description="慢性乙肝感染"
     )
     CHB_shaicha = State(
         name="CHB_shaicha",
@@ -448,7 +445,6 @@ def my_treeage_shaicha():
     pHCCI = State(
         name="pHCCI",
         description="临床前I期",
-        utility_func=lambda cycle, p: discount(params.U_HCCI, params.DR, cycle),
     )
     pHCCI_shaicha = State(
         name="pHCCI_shaicha",
@@ -476,7 +472,6 @@ def my_treeage_shaicha():
     cHCCI = State(
         name="cHCCI",
         description="cHCCI",
-        utility_func=lambda cycle, p: discount(params.U_HCCI, params.DR, cycle),
     )
     cHCCI.add_transition(
         death,
@@ -496,8 +491,6 @@ def my_treeage_shaicha():
     sHCCI = State(
         name="sHCCI",
         description="sHCCI",
-        cost_func=lambda cycle, p: discount(params.Cost_Treat_I, params.DR, cycle),
-        utility_func=lambda cycle, p: discount(params.U_HCCI, params.DR, cycle),
     )
     sHCCI.add_transition(
         death,
@@ -529,14 +522,10 @@ def my_treeage_shaicha():
     sCC = State(
         name="sCC",
         description="sCC",
-        cost_func=lambda cycle, p: params.Cost_Treat_CC,
-        utility_func=lambda cycle, p: discount(params.U_CC, params.DR, cycle)
     )
     CC = State(
         name="CC",
         description="CC",
-        cost_func=lambda cycle, p: params.Cost_Treat_CC,
-        utility_func=lambda cycle, p: discount(params.U_CC, params.DR, cycle),
     )
     tCC = State(
         name="tCC",
@@ -593,13 +582,11 @@ def my_treeage_shaicha():
     CHB_shaicha.add_transition(
         pre_ps_CC,
         probability_func=lambda cycle, p: params.get(key="p_HBV_CC", index=cycle),
-        transition_cost_func=lambda cycle, p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_CC
+
     )
     CHB_shaicha.add_transition(
         pre_ps_HCCI_1,
         probability_func=lambda cycle, p: params.get(key="p_HBV_pHCCI", index=int(cycle // 5 * 5)),
-        transition_cost_func=lambda cycle,
-                                    p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_I
 
     )
     CHB_shaicha.add_transition(
@@ -610,7 +597,6 @@ def my_treeage_shaicha():
         CHB,
         probability_func=lambda cycle, p: \
             1 - params.get(key="p_Death", index=cycle) - params.get(key="p_HBV_pHCCI", index=int(cycle // 5 * 5)) - params.get(key="p_HBV_CC", index=cycle),
-        transition_cost_func=lambda cycle, p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag
 
     )
     # endregion
@@ -668,12 +654,12 @@ def my_treeage_shaicha():
     pCC_shaicha.add_transition(
         pCC_stemp3,
         probability_func=lambda cycle, p: params.get(key="p_CC_PHCCI", index=cycle),
-        transition_cost_func=lambda cycle, p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_I
+
     )
     pCC_shaicha.add_transition(
         pCC_stemp1,
         probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_CC_PHCCI", index=cycle),
-        transition_cost_func=lambda cycle, p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_CC
+
     )
     # endregion
     # region ===== pCC 不筛查分支 =====
@@ -774,15 +760,12 @@ def my_treeage_shaicha():
     pHCCI_shaicha.add_transition(
         pHCCI_s_to_cI,
         probability_func=lambda cycle, p: params.get(key="p_HCCI_Detected", index=int(cycle // 5 * 5)),
-        transition_cost_func=lambda cycle,
-                                    p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_I
 
     )
     pHCCI_shaicha.add_transition(
         pHCCI_s_stay,
         probability_func=lambda cycle, p: 1 - params.get(key="p_HCCI_Detected", index=int(cycle // 5 * 5)) - params.get(key="p_Death", index=cycle),
-        transition_cost_func=lambda cycle,
-                                    p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_I
+
     )
     # endregion
     # region ===== 临床前I期不筛查分支 =====
