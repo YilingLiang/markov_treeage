@@ -77,54 +77,6 @@ class FiveStateMarkovModel:
 
         return self.results
 
-    def plot_results(self):
-        """绘制模拟结果"""
-        if self.results is None:
-            print("请先运行模拟")
-            return
-
-        years = range(self.years + 1)
-        plt.figure(figsize=(14, 8))
-
-        plt.plot(years, self.results[:, 0], label='Health', linewidth=2)
-        plt.plot(years, self.results[:, 1], label='CHB', linewidth=2)
-        plt.plot(years, self.results[:, 2], label='CC', linewidth=2)
-        plt.plot(years, self.results[:, 3], label='HCC', linewidth=2)
-        plt.plot(years, self.results[:, 4], label='Death', linewidth=2)
-
-        plt.xlabel('年份')
-        plt.ylabel('人数')
-        plt.title('五状态疾病转移马尔科夫模型模拟 (初始人群: {})'.format(self.initial_population))
-        plt.legend()
-        plt.grid(True, alpha=0.3)
-        plt.show()
-
-    def plot_stacked_results(self):
-        """绘制堆叠面积图"""
-        if self.results is None:
-            print("请先运行模拟")
-            return
-
-        years = range(self.years + 1)
-        plt.figure(figsize=(14, 8))
-
-        # 创建堆叠面积图
-        plt.stackplot(years,
-                      self.results[:, 0],  # Health
-                      self.results[:, 1],  # CHB
-                      self.results[:, 2],  # CC
-                      self.results[:, 3],  # HCC
-                      self.results[:, 4],  # Death
-                      labels=['Health', 'CHB', 'CC', 'HCC', 'Death'],
-                      alpha=0.7)
-
-        plt.xlabel('年份')
-        plt.ylabel('人数')
-        plt.title('五状态疾病转移马尔科夫模型模拟 - 堆叠图 (初始人群: {})'.format(self.initial_population))
-        plt.legend(loc='upper left')
-        plt.grid(True, alpha=0.3)
-        plt.show()
-
     def get_results_table(self):
         """返回结果为DataFrame"""
         if self.results is None:
@@ -173,10 +125,6 @@ if __name__ == "__main__":
     results_df = model.get_results_table()
     print("五状态马尔科夫模拟结果:")
     print(results_df.round(0))
-
-    # 绘制结果
-    model.plot_results()
-    model.plot_stacked_results()
 
     # 计算并显示患病率
     prevalence = model.calculate_prevalence()

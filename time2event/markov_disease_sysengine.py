@@ -1,0 +1,198 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from symengine import Matrix, sympify, zeros, lambdify, symbols, Add, Mul, Basic, sqrt, exp
+from scipy.optimize import minimize, LinearConstraint
+from scipy.optimize import dual_annealing, differential_evolution, NonlinearConstraint
+
+plt.rcParams['font.sans-serif'] = ['SimHei']  # 使用黑体
+plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题
+
+
+# 1. In the Markov model, the loss function is constructed using the incidence rate and mortality rate of each 5-year age group. How is the loss function constructed in the time-to-event model?
+# 2. In the Markov model, cost and utility is calculated annually. How are costs and utilities calculated in the time-to-event model? Are they also discretized into years?
+#    Or multiply the cost and utility by the duration of the corresponding state.
+
+class HCCMarkovModel:
+    """
+    model construction: five states  [health, chb, cc, hcc, death]
+    """
+    def __init__(self, initial_population=10000, years=20):
+
+        self.initial_population = initial_population
+        self.years = years
+        self.transition_matrix = None
+        self.results = None
+        self.cc_to_hcc_symbol = symbols('cc_to_hcc')  # 定义符号变量
+
+    def set_transition_probabilities(self,
+                                     health_to_chb=0.04,
+                                     health_to_death=0.01,
+                                     chb_to_cc=0.08,
+                                     chb_to_death=0.03,
+                                     cc_to_death=0.06,
+                                     hcc_to_death=0.25):
+        """
+        设置五状态转移概率，cc_to_hcc作为符号变量
+        状态: 0=health, 1=chb, 2=cc, 3=hcc, 4=death
+        """
+        # 使用符号变量cc_to_hcc_symbol
+        self.transition_matrix = Matrix([
+            # health 到: [health, chb, cc, hcc, death]
+            [1 - health_to_chb - health_to_death, health_to_chb, 0, 0, health_to_death],
+            # chb 到: [health, chb, cc, hcc, death]
+            [0, 1 - chb_to_cc - chb_to_death, chb_to_cc, 0, chb_to_death],
+            # cc 到: [health, chb, cc, hcc, death]
+            [0, 0, 1 - self.cc_to_hcc_symbol - cc_to_death, self.cc_to_hcc_symbol, cc_to_death],
+            # hcc 到: [health, chb, cc, hcc, death]
+            [0, 0, 0, 1 - hcc_to_death, hcc_to_death],
+            # death 到: [health, chb, cc, hcc, death] (死亡是吸收状态)
+            [0, 0, 0, 0, 1]
+        ])
+
+    def simulate_symbolic(self):
+        """运行符号马尔科夫模拟"""
+        # 初始化状态向量
+        state_vector = Matrix([self.initial_population, 0, 0, 0, 0])
+
+        # 存储每年的结果
+        self.results = [state_vector]
+
+        # 逐年模拟（符号计算）
+        for year in range(1, self.years + 1):
+            # 使用矩阵乘法进行状态转移
+            new_state = self.transition_matrix.T * self.results[-1]
+            self.results.append(new_state)
+
+        return self.results
+
+    def get_results_table(self):
+        """返回结果为符号表达式DataFrame"""
+        if self.results is None:
+            print("first run the function: self.simulate_symbolic")
+            return
+
+        # 创建包含符号表达式的结果表格
+        results_data = []
+        for year, state in enumerate(self.results):
+            results_data.append([state[i] for i in range(5)])
+
+        return pd.DataFrame(results_data,
+                            columns=['Health', 'CHB', 'CC', 'HCC', 'Death'],
+                            index=range(self.years + 1))
+
+    def calculate_prevalence_symbolic(self):
+        """计算每年的疾病患病率（符号表达式）"""
+        if self.results is None:
+            print("first run the function: self.simulate_symbolic")
+            return
+
+        prevalence = []
+        for state in self.results:
+            # 总存活人口 = Health + CHB + CC + HCC
+            alive_population = state[0] + state[1] + state[2] + state[3]
+            # 疾病病例 = CHB + CC + HCC
+            disease_cases = state[1] + state[2] + state[3]
+
+            # 患病率 = 疾病病例 / 存活人口
+            if alive_population != 0:
+                prevalence.append(disease_cases / alive_population)
+            else:
+                prevalence.append(0)
+
+        return prevalence
+
+    def evaluate_prevalence(self, cc_to_hcc_value:float, simplify=True):
+        """calculate prevalence with cc_to_hcc_value"""
+        prevalence_symbolic = self.calculate_prevalence_symbolic()
+        prevalence_numeric = []
+
+        for expr in prevalence_symbolic:
+            # 替换符号变量为具体数值
+            evaluated_expr = expr.subs(self.cc_to_hcc_symbol, cc_to_hcc_value)
+            if simplify:
+                evaluated_expr = evaluated_expr.simplify()
+            prevalence_numeric.append(float(evaluated_expr) if evaluated_expr.is_Number else evaluated_expr)
+
+        return prevalence_numeric
+
+    def get_prevalence_function(self):
+        """返回患病率关于cc_to_hcc的函数"""
+        prevalence_symbolic = self.calculate_prevalence_symbolic()
+
+        # 创建函数列表
+        prevalence_funcs = []
+        for expr in prevalence_symbolic:
+            # 将符号表达式转换为可调用的函数
+            func = lambdify(self.cc_to_hcc_symbol, [expr])
+            prevalence_funcs.append(func)
+
+        return prevalence_funcs
+
+    def optimize(self, target_prevalance: float):
+        """给定第20年的换病率，求解参数 cc_to_hcc，目标函数为最小二乘，求解结果返回目标函数值和优化后的cc_to_hcc参数"""
+        obj = (self.calculate_prevalence_symbolic()[-1] - target_prevalance) ** 2
+        free_symbols = tuple(obj.free_symbols)
+        f_lambdified = lambdify(free_symbols, [obj])
+        initial_values = np.array([0.02])
+        result = minimize(f_lambdified, initial_values, method="L-BFGS-B", bounds=[(0, 1)])
+        result_x = dict(zip(free_symbols, result.x)) # 求解结果
+
+        return result.fun, result_x
+
+
+if __name__ == "__main__":
+    # 创建符号模型实例
+    model = HCCMarkovModel(initial_population=10000, years=20)
+
+    # 设置转移概率（cc_to_hcc作为符号变量）
+    model.set_transition_probabilities(
+        health_to_chb=0.04,  # 每年health到chb的概率
+        health_to_death=0.01,  # 每年health到death的概率(其他原因)
+        chb_to_cc=0.08,  # 每年chb到cc的概率
+        chb_to_death=0.03,  # 每年chb到death的概率
+        cc_to_death=0.06,  # 每年cc到death的概率
+        hcc_to_death=0.25  # 每年hcc到death的概率
+    )
+
+    # 运行符号模拟
+    results = model.simulate_symbolic()
+
+    # 显示结果表格（符号表达式）
+    results_df = model.get_results_table()
+    print("五状态马尔科夫模拟结果（符号表达式）:")
+    print(results_df)
+
+    # 计算并显示患病率（符号表达式）
+    prevalence = model.calculate_prevalence_symbolic()
+    prevalence_df = pd.DataFrame({
+        'Year': range(21),
+        'Prevalence': prevalence
+    })
+    print("\n每年疾病患病率（符号表达式）:")
+    print(prevalence_df)
+
+    # 计算特定cc_to_hcc值下的患病率
+    cc_to_hcc_value = 0.12  # 示例值
+    numeric_prevalence = model.evaluate_prevalence(cc_to_hcc_value)
+    print(f"\n当cc_to_hcc = {cc_to_hcc_value}时的患病率:")
+    for year, prev in enumerate(numeric_prevalence):
+        print(f"Year {year}: {prev:.6f}")
+
+    # 获取患病率函数
+    prevalence_funcs = model.get_prevalence_function()
+
+    # 测试函数
+    test_values = [0.1, 0.12, 0.15]
+    print(f"\n测试患病率函数:")
+    for val in test_values:
+        print(f"cc_to_hcc = {val}: Year 20 prevalence = {prevalence_funcs[20](val):.6f}")
+
+    # 显示最终状态的符号表达式
+    final_state = results_df.iloc[-1]
+    print("\n20年后最终状态（符号表达式）:")
+    for col in final_state.index:
+        print(f"{col}: {final_state[col]}")
+
+    res = model.optimize(target_prevalance=0.45)
+    print(res)
