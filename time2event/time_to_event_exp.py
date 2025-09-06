@@ -33,7 +33,7 @@ class HCCSurvivalModel:
                          hcc_to_death=0.25):
         """
         设置危险率（瞬时风险率）
-        使用符号变量cc_to_hcc_hazard
+        使用符号变量 cc_to_hcc_hazard
         """
         self.hazard_rates = {
             'health_to_chb': health_to_chb,
