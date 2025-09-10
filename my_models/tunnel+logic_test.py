@@ -30,10 +30,6 @@ if __name__ == "__main__":
         cost_func=lambda cycle, p: 2000,
         utility_func=lambda cycle, p: 0.7,
         tunnel_cycle=4,
-        # tunnel_transitions=[(
-        #     death,
-        #     lambda cycle, p: 0.2
-        # )]
     )
     # 疾病状态转移
     disease.add_transition(
@@ -60,16 +56,12 @@ if __name__ == "__main__":
         name="Treatment",
         description="治疗中",
         is_temporary=True,
-        cost_func=lambda cycle, p: 2000,
-        utility_func=lambda cycle, p: 1
     )
 
     diagnosis = State(
         name="Diagnosis",
         description="诊断中",
         is_temporary=True,
-        cost_func=lambda cycle, p: 2000,
-        utility_func=lambda cycle, p: 1
     )
 
     # 定义状态转移
@@ -82,12 +74,16 @@ if __name__ == "__main__":
     healthy.add_transition(
         diagnosis,
         probability_func=lambda cycle, p: 0.1,
+        transition_cost_func=lambda cycle, p: 2000,
+        transition_utility_func=lambda cycle, p: 1,
         condition=create_condition(max_cycle=50)  # 前50个周期走诊断路径
     )
 
     healthy.add_transition(
         treatment,
         probability_func=lambda cycle, p: 0.1,
+        transition_cost_func=lambda cycle, p: 2000,
+        transition_utility_func=lambda cycle, p: 1,
         condition=create_condition(min_cycle=50)  # 50个周期后走治疗路径
     )
 
@@ -130,7 +126,7 @@ if __name__ == "__main__":
     )
 
     # 运行模型
-    model.run(cycles=50, params=params, cohort=True)
+    model.run(cycles=100, params=params, cohort=True)
 
     # 分析结果
     print(f"总成本: {model.results['total_cost']:.2f}")

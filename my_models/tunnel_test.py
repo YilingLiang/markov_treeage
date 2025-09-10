@@ -31,7 +31,7 @@ if __name__ == "__main__":
         # --- 定义 Tunnel ---
         # 注意这里因数组下标和TreeAge的区别，TreeAge中初始停留周期数是 1 ，我们这里是 0，所以这里等价于TreeAge中的 _tunnel < 5
         tunnel_cycle=4,  # 停留 tunnel_cycle 个周期后强制转移
-        tunnel_transitions=[(death, lambda cycle, p: 0.2), (disease, lambda cycle, p: 0.8)]  # 强制转移的情况
+        tunnel_transitions=[(death, lambda cycle, p: 0.2, lambda c, p: 0, lambda c, p: 0), (disease, lambda cycle, p: 0.8, lambda c, p: 0, lambda c, p: 0)]  # 强制转移的情况
     )
 
     # 添加正常转移规则

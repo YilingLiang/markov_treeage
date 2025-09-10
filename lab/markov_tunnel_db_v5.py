@@ -139,18 +139,17 @@ class MarkovModel:
         while not q.empty():
             current_state_name, current_pop, dwell_time = q.get()
             current_state = self.state_map[current_state_name]
-
-            # 1. 计算当前临时状态**停留**产生的成本和效用
-            state_cost = current_state.cost_func(cycle, params)
-            state_utility = current_state.utility_func(cycle, params)
+            # 计算当前临时状态**停留**产生的成本和效用
+            tmp_state_cost = current_state.cost_func(cycle, params)
+            tmp_state_utility = current_state.utility_func(cycle, params)
             # 应用折扣（与周期一致）
-            discounted_state_cost = discount(state_cost, params.get("dr", 0), cycle)
-            discounted_state_utility = discount(state_utility, params.get("dr", 0), cycle)
+            discounted_state_cost = discount(tmp_state_cost, params.get("dr", 0), cycle)
+            discounted_state_utility = discount(tmp_state_utility, params.get("dr", 0), cycle)
             # 累计状态成本和效用
             total_temp_state_cost += current_pop * discounted_state_cost
             total_temp_state_utility += current_pop * discounted_state_utility
 
-            # 2. 处理转移（含转移动作的成本和效用）
+            # 处理转移（含转移动作的成本和效用）
             # 检查是否触发强制转移 (停留时间 >= tunnel_cycle)
             if current_state.tunnel_cycle is not None and dwell_time >= current_state.tunnel_cycle:
                 transitions = current_state.tunnel_transitions # 格式：(to_state, prob_func, cost_func, utility_func)
@@ -258,7 +257,6 @@ class MarkovModel:
         total_transition_utility = 0.0  # 所有转移动作的总效用
 
         for t in range(cycles):
-            current_cycle = t + 1  # 周期从1开始计数
             current_dwell = self.dwell_time_distributions[t] # 当前周期的停留时间分布
 
             # 初始化下一周期状态分布和停留时间分布
@@ -299,6 +297,7 @@ class MarkovModel:
                         cycle_state_cost += population * discounted_cost
                         cycle_state_utility += population * discounted_utility
 
+                        # print("============", population, cycle_state_cost, cycle_state_utility)
                     # 如果是吸收态，直接转移到下一周期
                     if from_state.is_absorbing:
                         next_state[state_idx] += population
@@ -318,7 +317,7 @@ class MarkovModel:
 
                         # 确保总概率为1
                         if not np.isclose(total_prob, 1.0, atol=1e-8):
-                            raise ValueError(f"周期{current_cycle}，状态{state_name}强制转移概率和为{total_prob}，应等于1")
+                            raise ValueError(f"周期{t}，状态{state_name}强制转移概率和为{total_prob}，应等于1")
 
                         # 使用强制转移规则
                         for to_state, prob_func, trans_cost_func, trans_utility_func in from_state.tunnel_transitions:
@@ -353,7 +352,7 @@ class MarkovModel:
                                 # 解析临时状态转移，获取临时状态的成本、效用和最终分布
                                 temp_total_cost, temp_total_utility, temp_trans_cost, temp_trans_utility, final_states = self._resolve_temporary_state(
                                     t, transferred_pop, to_state, edge_counts, edge_indices, edge_costs, edge_utilities, params)
-
+                                # print(f"临时成本与效用：{temp_total_cost}, {temp_total_utility}, {temp_trans_cost}, {temp_trans_utility}")
                                 # 累计临时状态的成本和效用
                                 cycle_state_cost += (temp_total_cost - temp_trans_cost)  # 临时状态停留成本
                                 cycle_state_utility += (temp_total_utility - temp_trans_utility)  # 临时状态停留效用
@@ -429,7 +428,7 @@ class MarkovModel:
                                 # 计算临时状态的成本和效用
                                 temp_total_cost, temp_total_utility, temp_trans_cost, temp_trans_utility, final_states = self._resolve_temporary_state(
                                     t, transferred_pop, to_state, edge_counts, edge_indices, edge_costs, edge_utilities, params)
-
+                                # print(f"2临时成本与效用：{temp_total_cost}, {temp_total_utility}, {temp_trans_cost}, {temp_trans_utility}")
                                 # 累计临时状态的成本和效用
                                 cycle_state_cost += (temp_total_cost - temp_trans_cost)  # 临时状态停留成本
                                 cycle_state_utility += (temp_total_utility - temp_trans_utility)  # 临时状态停留效用
@@ -512,35 +511,36 @@ class MarkovModel:
                 final_state_cost += pop * discounted_cost
                 final_state_utility += pop * discounted_utility
 
-            # 汇总最终指标
-            total_state_cost += final_state_cost
-            total_state_utility += final_state_utility
-            total_cost = total_state_cost + total_transition_cost
-            total_utility = total_state_utility + total_transition_utility
+        # print(f"final_state_cost: {final_state_cost}, final_state_utility: {final_state_utility}")
+        # 汇总最终指标
+        total_state_cost += final_state_cost
+        total_state_utility += final_state_utility
+        total_cost = total_state_cost + total_transition_cost
+        total_utility = total_state_utility + total_transition_utility
 
-            # 存储结果
-            self.results = {
-                # 状态分布
-                "state_counts": state_counts,
-                "dwell_time_distributions": self.dwell_time_distributions,
-                # 成本指标
-                "total_cost": total_cost,
-                "total_state_cost": total_state_cost,
-                "total_transition_cost": total_transition_cost,
-                "stage_state_costs": stage_state_costs + [final_state_cost],
-                "stage_transition_costs": stage_transition_costs,
-                # 效用指标
-                "total_utility": total_utility,
-                "total_state_utility": total_state_utility,
-                "total_transition_utility": total_transition_utility,
-                "stage_state_utilities": stage_state_utilities + [final_state_utility],
-                "stage_transition_utilities": stage_transition_utilities,
-                # 边转移详情
-                "edge_counts": edge_counts,
-                "edge_costs": edge_costs,
-                "edge_utilities": edge_utilities,
-                "edge_indices": edge_indices
-            }
+        # 存储结果
+        self.results = {
+            # 状态分布
+            "state_counts": state_counts,
+            "dwell_time_distributions": self.dwell_time_distributions,
+            # 成本指标
+            "total_cost": total_cost,
+            "total_state_cost": total_state_cost,
+            "total_transition_cost": total_transition_cost,
+            "stage_state_costs": stage_state_costs + [final_state_cost],
+            "stage_transition_costs": stage_transition_costs,
+            # 效用指标
+            "total_utility": total_utility,
+            "total_state_utility": total_state_utility,
+            "total_transition_utility": total_transition_utility,
+            "stage_state_utilities": stage_state_utilities + [final_state_utility],
+            "stage_transition_utilities": stage_transition_utilities,
+            # 边转移详情
+            "edge_counts": edge_counts,
+            "edge_costs": edge_costs,
+            "edge_utilities": edge_utilities,
+            "edge_indices": edge_indices
+        }
 
     def _get_state_index(self, state_name: str) -> int:
         """获取状态的索引"""

@@ -149,7 +149,7 @@ if __name__ == "__main__":
     )
 
     # 运行模型
-    model.run(cycles=10, params=params, cohort=True)
+    model.run(cycles=100, params=params, cohort=True)
 
     # 分析结果
     print(f"总成本: {model.results['total_cost']:.2f}")
