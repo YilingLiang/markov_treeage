@@ -8,6 +8,7 @@ from lab.condition import create_condition, create_condition_gq_leq
 from parameter.define_parameters import Parameters
 from parameter.define_tables import Table
 import matplotlib.pyplot as plt
+from my_models.my_utils.utility import state_utility_func # 用于处理半周期矫正
 
 
 def my_treeage_shaicha():
@@ -98,74 +99,82 @@ def my_treeage_shaicha():
  83: 0.073152,
  84: 0.073152,
  85: 0.073152})
-    HCCIdeath = Table({0: 0.168841742,
- 5: 0.172967452,
- 10: 0.168532489,
- 15: 0.166811506,
- 20: 0.158333117,
- 25: 0.136455063,
- 30: 0.149607158,
- 35: 0.168662903,
- 40: 0.145862319,
- 45: 0.163663608,
- 50: 0.210845768,
- 55: 0.168017125,
- 60: 0.19682212,
- 65: 0.197315309,
- 70: 0.162911856,
- 75: 0.208827907,
- 80: 0.248466723})
-    HCCIIdeath = Table({0: 0.217532697,
- 5: 0.183973012,
- 10: 0.169753133,
- 15: 0.180635705,
- 20: 0.193378244,
- 25: 0.214194574,
- 30: 0.200650976,
- 35: 0.170206277,
- 40: 0.207949708,
- 45: 0.19939164,
- 50: 0.233102423,
- 55: 0.183340603,
- 60: 0.230438353,
- 65: 0.215190602,
- 70: 0.239023904,
- 75: 0.249982717,
- 80: 0.259566745})
-    HCCIIIdeath = Table({0: 0.234457863,
- 5: 0.232069236,
- 10: 0.237836608,
- 15: 0.230789525,
- 20: 0.229724734,
- 25: 0.215917099,
- 30: 0.221961541,
- 35: 0.220154001,
- 40: 0.209375844,
- 45: 0.208505951,
- 50: 0.267958758,
- 55: 0.193582381,
- 60: 0.235664984,
- 65: 0.257892328,
- 70: 0.245997391,
- 75: 0.278361951,
- 80: 0.328260728})
-    HCCIVdeath = Table({0: 0.238623706,
- 5: 0.238623706,
- 10: 0.252115033,
- 15: 0.235732737,
- 20: 0.234090839,
- 25: 0.24028112,
- 30: 0.249114879,
- 35: 0.244188829,
- 40: 0.239528015,
- 45: 0.252344626,
- 50: 0.303993039,
- 55: 0.232032961,
- 60: 0.284038499,
- 65: 0.277957033,
- 70: 0.264111405,
- 75: 0.298714668,
- 80: 0.391823347})
+    HCCIdeath = Table({
+    0: 0.014869866,
+    5: 0.016110211,
+    10: 0.017078674,
+    15: 0.018212421,
+    20: 0.020263037,
+    25: 0.02796458,
+    30: 0.059530759,
+    35: 0.113428492,
+    40: 0.151244794,
+    45: 0.170933205,
+    50: 0.171417444,
+    55: 0.171512303,
+    60: 0.17839755,
+    65: 0.210762162,
+    70: 0.212052307,
+    75: 0.243446998,
+    80: 0.281806659
+})
+    HCCIIdeath = Table({
+    0: 0.016302651,
+    5: 0.01841458,
+    10: 0.019963678,
+    15: 0.021610312,
+    20: 0.02414665,
+    25: 0.035744155,
+    30: 0.088645402,
+    35: 0.15578178,
+    40: 0.170345144,
+    45: 0.190916262,
+    50: 0.191327152,
+    55: 0.191390276,
+    60: 0.240499344,
+    65: 0.247553325,
+    70: 0.2483359,
+    75: 0.298192654,
+    80: 0.334219521
+})
+    HCCIIIdeath = Table({
+    0: 0.019718944,
+    5: 0.022355104,
+    10: 0.026443191,
+    15: 0.028492641,
+    20: 0.03123555,
+    25: 0.043856577,
+    30: 0.117407756,
+    35: 0.163849627,
+    40: 0.177778372,
+    45: 0.195821671,
+    50: 0.196658741,
+    55: 0.196747608,
+    60: 0.247369002,
+    65: 0.269723986,
+    70: 0.270798304,
+    75: 0.305084664,
+    80: 0.373460473
+})
+    HCCIVdeath = Table({
+    0: 0.026847398,
+    5: 0.027747398,
+    10: 0.033057726,
+    15: 0.035484783,
+    20: 0.038809733,
+    25: 0.06102273,
+    30: 0.139676425,
+    35: 0.172298758,
+    40: 0.180292214,
+    45: 0.196741663,
+    50: 0.393272463,
+    55: 0.393427116,
+    60: 0.394183758,
+    65: 0.395040231,
+    70: 0.395708372,
+    75: 0.39697946,
+    80: 0.398641114
+})
     pHBVToHCCI = Table({0: 0.00052,
  5: 0.00052,
  10: 0.00052,
@@ -253,23 +262,23 @@ def my_treeage_shaicha():
  75: 0.6,
  80: 0.6})
     phealthToCHB = Table({
-    0: 0.00002704500,
-    5: 0.00005070110,
-    10: 0.00030724800,
-    15: 0.00017783200,
-    20: 0.00005397770,
-    25: 0.00004286340,
-    30: 0.00008639170,
-    35: 0.00797812100,
-    40: 0.00659399400,
-    45: 0.00004775160,
-    50: 0.00976703100,
-    55: 0.00702063200,
-    60: 0.00008521510,
-    65: 0.00716413100,
-    70: 0.00162877000,
-    75: 0.00048909600,
-    80: 0.00470835700
+    0: 0.000013836184234,
+    5: 0.000016535591348,
+    10: 0.000018496337897,
+    15: 0.000020339884271,
+    20: 0.000022602118600,
+    25: 0.000027138615798,
+    30: 0.002856437966841,
+    35: 0.005029423534905,
+    40: 0.005032266426669,
+    45: 0.005033500103206,
+    50: 0.005034317464886,
+    55: 0.005034857799209,
+    60: 0.005035348550328,
+    65: 0.005035990758334,
+    70: 0.005037176660754,
+    75: 0.005041950396164,
+    80: 0.005555136298508
 })
     ratescreen = Table({1: 0, 2: 1, 3: 1})
     Utility = Table({0: 1.0, 1: 0.761, 2: 0.643, 3: 0.76, 4: 0.68, 5: 0.4, 6: 0.25})
@@ -279,7 +288,7 @@ def my_treeage_shaicha():
     params = Parameters(
         Cost_AFP=(0.65, "AFP检测费用"),
         Cost_Diag=(90.03, "诊断费用"),
-        Cost_HBsAgque=(0.07 + 2.22, "HBsAg检查费用（风险评估交通费+误工费+HBsAg检测）"),
+        Cost_HBsAgque=(0.07 + 2.22 + 0.65, "HBsAg检查费用（风险评估交通费+误工费+HBsAg检测）"),
         Cost_Treat_CC=(5688.29 + 1392.4, "肝硬化治疗费(直接+间接)"),
         Cost_Treat_DCC=(5688.29 + 1392.4, "失代偿"),
         Cost_Treat_HBV=(4563.5, "HBV治疗"),
@@ -287,13 +296,14 @@ def my_treeage_shaicha():
         Cost_Treat_II=(9019.05 + 1960.32, ""),
         Cost_Treat_III=(8983.77 + 1808.38, ""),
         Cost_Treat_IV=(9588.45 + 1860.69, ""),
-        Cost_US=(10 + 6.33 + 4.38, "超声检查费用（临床检查交通费+误工费+AFP+US）"),
+        Cost_US=(10 + 6.33 + 4.38 + 0.65, "超声检查费用（临床检查交通费+误工费+AFP+US）"),
         Cost_vac=(82.6, ""),
         cost_zhi_CC=(30657.7, "抗病毒治疗下肝硬化费用"),
         cost_zhi_CHB=(18689.5, "抗病毒治疗下慢乙肝费用"),
         cost_zhi_DCC=(43318.1, "抗病毒治疗下失代偿费用"),
-        DR=(0.03, "贴现率"),
+        DR=(0.05, "贴现率"),
         dr=(0.00, "贴现率2"),
+        p_CC_cure=(0.079, ""),
         p_CC_DCC=(0.058, "代偿肝硬化_失代偿肝硬化"),
         p_CC_DCC_treat=(0.019, "治疗后 代偿肝硬化_失代偿肝硬化"),
         p_CC_Death=(0.031, "代偿肝硬化_死于代偿肝硬化"),
@@ -302,6 +312,7 @@ def my_treeage_shaicha():
         p_CC_PHCCI_treat=(0.02, "治疗后 代偿肝硬化_临床前I期"),
         p_CC_treat=(0.7, ""),
         p_CC_zifa=(0.15, ""),
+        p_DCC_cure=(0.033, ""),
         p_DCC_Death=(0.17, "失代偿肝硬化_死于失代偿肝硬化"),
         p_DCC_Death_treat=(0.095, ""),
         p_DCC_PHCCI=(0.034, "失代偿肝硬化_临床前I期"),
@@ -311,6 +322,7 @@ def my_treeage_shaicha():
         p_Death=(Death, "xxx_死于其他原因"),
         p_HBV_CC=(0.0173, "慢性乙肝_代偿肝硬化"),
         p_HBV_pHCCI=(pHBVToHCCI, "慢性乙肝_临床前I期(---)"),
+        p_HCC_treat=(0.0, ""),
         p_HCCI_Death=(HCCIdeath, "I期_死于肝癌"),
         p_HCCI_Detected=(pHCCITocHCCI, "临床前I期_I期"),
         p_HCCI_HCCII=(0.29, "临床前I期_临床前II期"),
@@ -373,28 +385,7 @@ def my_treeage_shaicha():
     Healthy = State(
         name="Healthy",
         description="健康",
-        utility_func=lambda cycle, p: discount(params.U_health, params.DR, cycle),
-    )
-    health_shaicha = State(
-        name="health_shaicha",
-        description="健康筛查 screening",
-        is_temporary=True,
-    )
-    health_noshaicha = State(
-        name="health_noshaicha",
-        description="健康不筛查 no screening",
-        is_temporary=True,
-    )
-    Healthy.add_transition(
-        health_shaicha,
-        condition=create_condition_gq_leq(min_cycle=35, max_cycle=70),
-        probability_func=lambda cycle, p: 1
-    )
-
-    Healthy.add_transition(
-        health_noshaicha,
-        condition=create_condition_gq_leq(min_cycle=35, max_cycle=70, cycle_mode="or"),
-        probability_func=lambda cycle, p: 1
+        utility_func=lambda cycle, p: state_utility_func(params.U_health, params.DR, cycle),
     )
     # endregion
     # region ===== CHB慢性乙肝感染 =====
@@ -402,7 +393,7 @@ def my_treeage_shaicha():
         name="CHB",
         description="慢性乙肝感染",
         cost_func=lambda cycle, p: 0,
-        utility_func=lambda cycle, p: discount(params.U_health, params.DR, cycle)
+        utility_func=lambda cycle, p: state_utility_func(params.U_health, params.DR, cycle)
     )
     CHB_shaicha = State(
         name="CHB_shaicha",
@@ -428,7 +419,8 @@ def my_treeage_shaicha():
     # region ===== pCC =====
     pCC = State(
         name="pCC",
-        description="pCC"
+        description="pCC",
+        utility_func=lambda cycle, p: state_utility_func(params.U_health, params.DR, cycle),
     )
     pCC_shaicha = State(
         name="pCC_shaicha",
@@ -454,7 +446,8 @@ def my_treeage_shaicha():
     # region ===== pDCC =====
     pDCC = State(
         name="pDCC",
-        description="pDCC"
+        description="pDCC",
+        utility_func=lambda cycle, p: state_utility_func(params.U_health, params.DR, cycle),
     )
     pDCC_shaicha = State(
         name="pDCC_shaicha",
@@ -477,12 +470,26 @@ def my_treeage_shaicha():
         probability_func=lambda cycle, p: 1
     )
     # endregion
-
+    # region ===== 治愈状态 =====
+    cured = State(
+        name="cured",
+        description="cured",
+        utility_func=lambda cycle, p: state_utility_func(params.U_health, params.DR, cycle),
+    )
+    cured.add_transition(
+        death,
+        probability_func=lambda cycle, p: params.get(key="p_Death", index=cycle)
+    )
+    cured.add_transition(
+        cured,
+        probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle)
+    )
+    # endregion
     # region ===== 临床前I期 =====
     pHCCI = State(
         name="pHCCI",
         description="临床前I期",
-        utility_func=lambda cycle, p: discount(params.U_HCCI, params.DR, cycle),
+        utility_func=lambda cycle, p: state_utility_func(params.U_HCCI, params.DR, cycle),
     )
     pHCCI_shaicha = State(
         name="pHCCI_shaicha",
@@ -509,7 +516,7 @@ def my_treeage_shaicha():
     pHCCII = State(
         name="pHCCII",
         description="临床前II期",
-        utility_func=lambda cycle, p: discount(params.U_HCCII, params.DR, cycle),
+        utility_func=lambda cycle, p: state_utility_func(params.U_HCCII, params.DR, cycle),
     )
     pHCCII_shaicha = State(
         name="pHCCII_shaicha",
@@ -536,7 +543,7 @@ def my_treeage_shaicha():
     pHCCIII = State(
         name="pHCCIII",
         description="临床前III期",
-        utility_func=lambda cycle, p: discount(params.U_HCCIII, params.DR, cycle),
+        utility_func=lambda cycle, p: state_utility_func(params.U_HCCIII, params.DR, cycle),
     )
     pHCCIII_shaicha = State(
         name="pHCCIII_shaicha",
@@ -563,7 +570,7 @@ def my_treeage_shaicha():
     pHCCIV = State(
         name="pHCCIV",
         description="临床前IV期",
-        utility_func=lambda cycle, p: discount(params.U_HCCIV, params.DR, cycle),
+        utility_func=lambda cycle, p: state_utility_func(params.U_HCCIV, params.DR, cycle),
     )
     pHCCIV_shaicha = State(
         name="pHCCIV_shaicha",
@@ -591,7 +598,7 @@ def my_treeage_shaicha():
     cHCCI = State(
         name="cHCCI",
         description="cHCCI",
-        utility_func=lambda cycle, p: discount(params.U_HCCI, params.DR, cycle),
+        utility_func=lambda cycle, p: state_utility_func(params.U_HCCI, params.DR, cycle),
     )
     cHCCI.add_transition(
         death,
@@ -610,7 +617,7 @@ def my_treeage_shaicha():
     cHCCII = State(
         name="cHCCII",
         description="cHCCII",
-        utility_func=lambda cycle, p: discount(params.U_HCCII, params.DR, cycle),
+        utility_func=lambda cycle, p: state_utility_func(params.U_HCCII, params.DR, cycle),
     )
     cHCCII.add_transition(
         death,
@@ -629,7 +636,7 @@ def my_treeage_shaicha():
     cHCCIII = State(
         name="cHCCIII",
         description="cHCCIII",
-        utility_func=lambda cycle, p: discount(params.U_HCCIII, params.DR, cycle),
+        utility_func=lambda cycle, p: state_utility_func(params.U_HCCIII, params.DR, cycle),
     )
     cHCCIII.add_transition(
         death,
@@ -648,7 +655,7 @@ def my_treeage_shaicha():
     cHCCIV = State(
         name="cHCCIV",
         description="cHCCIV",
-        utility_func=lambda cycle, p: discount(params.U_HCCIV, params.DR, cycle),
+        utility_func=lambda cycle, p: state_utility_func(params.U_HCCIV, params.DR, cycle),
     )
     cHCCIV.add_transition(
         death,
@@ -668,8 +675,8 @@ def my_treeage_shaicha():
     sHCCI = State(
         name="sHCCI",
         description="sHCCI",
-        cost_func=lambda cycle, p: discount(params.Cost_Treat_I, params.DR, cycle),
-        utility_func=lambda cycle, p: discount(params.U_HCCI, params.DR, cycle),
+        cost_func=lambda cycle, p: state_utility_func(params.Cost_Treat_I, params.DR, cycle),
+        utility_func=lambda cycle, p: state_utility_func(params.U_HCCI, params.DR, cycle),
     )
     sHCCI.add_transition(
         death,
@@ -688,8 +695,8 @@ def my_treeage_shaicha():
     sHCCII = State(
         name="sHCCII",
         description="sHCCII",
-        cost_func=lambda cycle, p: discount(params.Cost_Treat_II, params.DR, cycle),
-        utility_func=lambda cycle, p: discount(params.U_HCCII, params.DR, cycle),
+        cost_func=lambda cycle, p: state_utility_func(params.Cost_Treat_II, params.DR, cycle),
+        utility_func=lambda cycle, p: state_utility_func(params.U_HCCII, params.DR, cycle),
     )
     sHCCII.add_transition(
         death,
@@ -708,8 +715,8 @@ def my_treeage_shaicha():
     sHCCIII = State(
         name="sHCCIII",
         description="sHCCIII",
-        cost_func=lambda cycle, p: discount(params.Cost_Treat_III, params.DR, cycle),
-        utility_func=lambda cycle, p: discount(params.U_HCCIII, params.DR, cycle),
+        cost_func=lambda cycle, p: state_utility_func(params.Cost_Treat_III, params.DR, cycle),
+        utility_func=lambda cycle, p: state_utility_func(params.U_HCCIII, params.DR, cycle),
     )
     sHCCIII.add_transition(
         death,
@@ -728,8 +735,8 @@ def my_treeage_shaicha():
     sHCCIV = State(
         name="sHCCIV",
         description="sHCCIV",
-        cost_func=lambda cycle, p: discount(params.Cost_Treat_IV, params.DR, cycle),
-        utility_func=lambda cycle, p: discount(params.U_HCCIV, params.DR, cycle),
+        cost_func=lambda cycle, p: state_utility_func(params.Cost_Treat_IV, params.DR, cycle),
+        utility_func=lambda cycle, p: state_utility_func(params.U_HCCIV, params.DR, cycle),
     )
     sHCCIV.add_transition(
         death,
@@ -748,102 +755,52 @@ def my_treeage_shaicha():
     sCC = State(
         name="sCC",
         description="sCC",
-        cost_func=lambda cycle, p: params.Cost_Treat_CC,
-        utility_func=lambda cycle, p: discount(params.U_CC, params.DR, cycle)
+        utility_func=lambda cycle, p: state_utility_func(params.U_CC, params.DR, cycle)
     )
     sDCC = State(
         name="sDCC",
         description="sDCC",
-        cost_func=lambda cycle, p: params.Cost_Treat_DCC,
-        utility_func=lambda cycle, p: discount(params.U_DCC, params.DR, cycle)
+        utility_func=lambda cycle, p: state_utility_func(params.U_DCC, params.DR, cycle)
     )
     CC = State(
         name="CC",
         description="CC",
-        cost_func=lambda cycle, p: params.Cost_Treat_CC,
-        utility_func=lambda cycle, p: discount(params.U_CC, params.DR, cycle),
+        utility_func=lambda cycle, p: state_utility_func(params.U_CC, params.DR, cycle),
     )
     DCC = State(
         name="DCC",
         description="DCC",
-        cost_func=lambda cycle, p: params.Cost_Treat_DCC,
-        utility_func=lambda cycle, p: discount(params.U_DCC, params.DR, cycle)
+        utility_func=lambda cycle, p: state_utility_func(params.U_DCC, params.DR, cycle)
     )
     tCC = State(
         name="tCC",
         description="CC treated",
+        cost_func=lambda cycle, p: state_utility_func(params.Cost_Treat_CC, params.DR, cycle),
+        utility_func=lambda cycle, p: state_utility_func(params.U_health, params.DR, cycle),
         tunnel_cycle=11 #
     )
     tDCC = State(
         name="tDCC",
         description="DCC treated",
+        cost_func=lambda cycle, p: state_utility_func(params.Cost_Treat_DCC, params.DR, cycle),
+        utility_func=lambda cycle, p: state_utility_func(params.U_health, params.DR, cycle),
         tunnel_cycle=11
     )
-    # region ===== 治愈状态 =====
-    cured = State(
-        name="cured",
-        description="cured",
-    )
-    cured.add_transition(
-        death,
-        probability_func=lambda cycle, p: params.get(key="p_Death", index=cycle)
-    )
-    cured.add_transition(
-        cured,
-        probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle)
-    )
-    # endregion
-    # region ===== 健康筛查分支 =====
-    pre_ps_HCCI = State(
-        name="pre_ps_HCCI",
-        description="health screening to pHCCI",
-        is_temporary=True
-    )
-    pre_ps_HCCI.add_transition(
-        sHCCI,
-        probability_func=lambda cycle, p: params.True_pos_AFP_USearly * params.Rate_screening2
-    )
-    pre_ps_HCCI.add_transition(
-        pHCCI,
-        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly * params.Rate_screening2
-    )
-    health_shaicha.add_transition(
-        pre_ps_HCCI,
-        probability_func=lambda cycle, p: params.get(key="p_health_pHCCI", index=int(cycle // 5 * 5)),
-        transition_cost_func=lambda cycle, p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_I
-    )
-    health_shaicha.add_transition(
-        death,
-        probability_func=lambda cycle, p: params.get(key="p_Death", index=cycle)
-    )
-    health_shaicha.add_transition(
-        CHB,
-        probability_func=lambda cycle, p: params.get(key="p_health_CHB", index=int(cycle // 5 * 5)),
-        transition_cost_func=lambda cycle, p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag
-    )
-    health_shaicha.add_transition(
-        Healthy,
-        probability_func=lambda cycle, p: \
-            1 - params.get(key="p_health_pHCCI", index=int(cycle // 5 * 5)) -
-                params.get(key="p_Death", index=cycle) - params.get(key="p_health_CHB", index=int(cycle // 5 * 5)),
-        transition_cost_func=lambda cycle, p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag
 
-    )
-    # endregion
     # region ===== 健康不筛查分支 =====
-    health_noshaicha.add_transition(
+    Healthy.add_transition(
         pHCCI,
         probability_func=lambda cycle, p: params.get(key="p_health_pHCCI", index=int(cycle // 5 * 5))
     )
-    health_noshaicha.add_transition(
+    Healthy.add_transition(
         death,
         probability_func=lambda cycle, p: params.get(key="p_Death", index=cycle)
     )
-    health_noshaicha.add_transition(
+    Healthy.add_transition(
         CHB,
         probability_func=lambda cycle, p: params.get(key="p_health_CHB", index=int(cycle // 5 * 5))
     )
-    health_noshaicha.add_transition(
+    Healthy.add_transition(
         Healthy, # 0.9995868327777778
         probability_func=lambda cycle, p: \
             1 - params.get(key="p_health_pHCCI", index=int(cycle // 5 * 5)) - params.get(key="p_Death", index=cycle) - params.get(
@@ -857,49 +814,189 @@ def my_treeage_shaicha():
         description="CHB screening to CC",
         is_temporary=True
     )
-    pre_ps_CC.add_transition(
+    pre_ps_CC_1 = State(
+        name="pre_ps_CC_1",
+        description="CHB screening to CC 1",
+        is_temporary=True
+    )
+    pre_ps_CC_2 = State(
+        name="pre_ps_CC_2",
+        description="CHB screening to CC 2",
+        is_temporary=True
+    )
+
+    pre_ps_CC_3 = State(
+        name="pre_ps_CC_3",
+        description="CHB screening to CC 3",
+        is_temporary=True
+    )
+    pre_ps_CC_3.add_transition(
         sCC,
-        probability_func=lambda cycle, p: params.True_pos_cc * params.Rate_screening2
+        probability_func=lambda cycle, p: params.True_pos_cc,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_Diag, params.DR, cycle)
+    )
+    pre_ps_CC_3.add_transition(
+        pCC,
+        probability_func=lambda cycle, p: 1 - params.True_pos_cc
+    )
+    pre_ps_CC_2.add_transition(
+        pre_ps_CC_3,
+        probability_func=lambda cycle, p: params.Rate_screening2,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_AFP + params.Cost_US, params.DR, cycle)
+    )
+    pre_ps_CC_2.add_transition(
+        pCC,
+        probability_func=lambda cycle, p: 1 - params.Rate_screening2
+    )
+    pre_ps_CC_1.add_transition(
+        pre_ps_CC_2,
+        probability_func=lambda cycle, p: params.Posrate_highrisk
+    )
+    pre_ps_CC_1.add_transition(
+        pCC,
+        probability_func=lambda cycle, p: 1 - params.Posrate_highrisk
+    )
+    pre_ps_CC.add_transition(
+        pre_ps_CC_1,
+        probability_func=lambda cycle, p: 1,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_HBsAgque, params.DR, cycle)
     )
     pre_ps_CC.add_transition(
         pCC,
-        probability_func=lambda cycle, p: 1 - params.True_pos_cc * params.Rate_screening2
+        probability_func=lambda cycle, p: 0
     )
-    pre_ps_HCCI_1 = State(
-        name="pre_ps_HCCI_1",
+
+    pre_ps_HCCI = State(
+        name="pre_ps_HCCI",
         description="CHB screening to pHCCI",
         is_temporary=True
     )
-    pre_ps_HCCI_1.add_transition(
+    pre_ps_HCCI_1 = State(
+        name="pre_ps_HCCI_1",
+        description="CHB screening to pHCCI 1",
+        is_temporary=True
+    )
+    pre_ps_HCCI_2 = State(
+        name="pre_ps_HCCI_2",
+        description="CHB screening to pHCCI 2",
+        is_temporary=True
+    )
+    pre_ps_HCCI_3 = State(
+        name="pre_ps_HCCI_3",
+        description="CHB screening to pHCCI 3",
+        is_temporary=True
+    )
+
+    pre_ps_HCCI_3.add_transition(
         sHCCI,
-        probability_func=lambda cycle, p: params.True_pos_AFP_USearly * params.Rate_screening2
+        probability_func=lambda cycle, p: params.True_pos_AFP_USearly,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_Diag, params.DR, cycle)
+    )
+    pre_ps_HCCI_3.add_transition(
+        pHCCI,
+        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly
+    )
+    pre_ps_HCCI_2.add_transition(
+        pre_ps_HCCI_3,
+        probability_func=lambda cycle, p: params.Rate_screening2,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_AFP + params.Cost_US, params.DR, cycle)
+    )
+    pre_ps_HCCI_2.add_transition(
+        pHCCI,
+        probability_func=lambda cycle, p: 1 - params.Rate_screening2
+    )
+
+    pre_ps_HCCI_1.add_transition(
+        pre_ps_HCCI_2,
+        probability_func=lambda cycle, p: params.Posrate_highrisk
     )
     pre_ps_HCCI_1.add_transition(
         pHCCI,
-        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly * params.Rate_screening2
+        probability_func=lambda cycle, p: 1 - params.Posrate_highrisk
+    )
+
+    pre_ps_HCCI.add_transition(
+        pre_ps_HCCI_1,
+        probability_func=lambda cycle, p: 1,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_HBsAgque, params.DR, cycle)
+    )
+    pre_ps_HCCI.add_transition(
+        pHCCI,
+        probability_func=lambda cycle, p: 0
+    )
+
+    CHB_stay = State(
+        name="CHB_stay",
+        description="CHB screening to stay",
+        is_temporary=True
+    )
+    CHB_stay_1 = State(
+        name="CHB_stay_1",
+        description="CHB screening to stay 1",
+        is_temporary=True
+    )
+    CHB_stay_2 = State(
+        name="CHB_stay_2",
+        description="CHB screening to stay 2",
+        is_temporary=True
+    )
+    CHB_stay_3 = State(
+        name="CHB_stay_3",
+        description="CHB screening to stay 3",
+        is_temporary=True
+    )
+    CHB_stay_3.add_transition(
+        CHB,
+        probability_func=lambda cycle, p: params.True_neg_AFP_US,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_Diag, params.DR, cycle)
+    )
+    CHB_stay_3.add_transition(
+        CHB,
+        probability_func=lambda cycle, p: 1 - params.True_neg_AFP_US,
+    )
+    CHB_stay_2.add_transition(
+        CHB_stay_3,
+        probability_func=lambda cycle, p: params.Rate_screening2,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_AFP + params.Cost_US, params.DR, cycle)
+    )
+    CHB_stay_2.add_transition(
+        CHB,
+        probability_func=lambda cycle, p: 1 - params.Rate_screening2
+    )
+    CHB_stay_1.add_transition(
+        CHB_stay_2,
+        probability_func=lambda cycle, p: params.Posrate_highrisk,
+    )
+    CHB_stay_1.add_transition(
+        CHB,
+        probability_func=lambda cycle, p: 1 - params.Posrate_highrisk
+    )
+
+    CHB_stay.add_transition(
+        CHB_stay_1,
+        probability_func=lambda cycle, p: 1,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_HBsAgque, params.DR, cycle)
+    )
+    CHB_stay.add_transition(
+        CHB,
+        probability_func=lambda cycle, p: 0
+    )
+    CHB_shaicha.add_transition(
+        CHB_stay,
+        probability_func=lambda cycle, p: \
+            1 - params.get(key="p_Death", index=cycle) - params.get(key="p_HBV_pHCCI", index=int(cycle // 5 * 5)) - params.get(key="p_HBV_CC", index=cycle),
     )
     CHB_shaicha.add_transition(
         pre_ps_CC,
         probability_func=lambda cycle, p: params.get(key="p_HBV_CC", index=cycle),
-        transition_cost_func=lambda cycle, p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_CC
     )
     CHB_shaicha.add_transition(
-        pre_ps_HCCI_1,
+        pre_ps_HCCI,
         probability_func=lambda cycle, p: params.get(key="p_HBV_pHCCI", index=int(cycle // 5 * 5)),
-        transition_cost_func=lambda cycle,
-                                    p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_I
-
     )
     CHB_shaicha.add_transition(
         death,
         probability_func=lambda cycle, p: params.get(key="p_Death", index=cycle)
-    )
-    CHB_shaicha.add_transition(
-        CHB,
-        probability_func=lambda cycle, p: \
-            1 - params.get(key="p_Death", index=cycle) - params.get(key="p_HBV_pHCCI", index=int(cycle // 5 * 5)) - params.get(key="p_HBV_CC", index=cycle),
-        transition_cost_func=lambda cycle, p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag
-
     )
     # endregion
     # region ===== CHB不筛查分支 =====
@@ -923,64 +1020,186 @@ def my_treeage_shaicha():
     )
     # endregion
     # region ===== pCC 筛查分支 =====
-    pCC_stemp1 = State(
-        name="pCC_stemp1",
+    pCC_stay = State(
+        name="pCC_stay",
         description="pCC screening stay here",
         is_temporary=True
     )
-    pCC_stemp2 = State(
-        name="pCC_stemp2",
+    pCC_stay_1 = State(
+        name="pCC_stay_1",
+        description="pCC screening stay here 1",
+        is_temporary=True
+    )
+    pCC_stay_2 = State(
+        name="pCC_stay_2",
+        description="pCC screening stay here 2",
+        is_temporary=True
+    )
+    pCC_stay_3 = State(
+        name="pCC_stay_3",
+        description="pCC screening stay here 3",
+        is_temporary=True
+    )
+    pCC_stay_3.add_transition(
+        sCC,
+        probability_func=lambda cycle, p: params.True_pos_cc,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_Diag, params.DR, cycle)
+    )
+    pCC_stay_3.add_transition(
+        pCC,
+        probability_func=lambda cycle, p: 1 - params.True_pos_cc
+    )
+    pCC_stay_2.add_transition(
+        pCC_stay_3,
+        probability_func=lambda cycle, p: params.Rate_screening2,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_AFP + params.Cost_US, params.DR, cycle)
+    )
+    pCC_stay_2.add_transition(
+        pCC,
+        probability_func=lambda cycle, p: 1 - params.Rate_screening2
+    )
+    pCC_stay_1.add_transition(
+        pCC_stay_2,
+        probability_func=lambda cycle, p: params.Posrate_highrisk
+    )
+    pCC_stay_1.add_transition(
+        pCC,
+        probability_func=lambda cycle, p: 1 - params.Posrate_highrisk
+    )
+    pCC_stay.add_transition(
+        pCC_stay_1,
+        probability_func=lambda cycle, p: 1,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_HBsAgque, params.DR, cycle)
+    )
+    pCC_stay.add_transition(
+        pCC,
+        probability_func=lambda cycle, p: 0
+    )
+    pCC_to_DCC = State(
+        name="pCC_to_DCC",
         description="pCC screening CC_to_DCC",
         is_temporary=True
     )
-    pCC_stemp3 = State(
-        name="pCC_stemp3",
+    pCC_to_DCC_1 = State(
+        name="pCC_to_DCC_1",
+        description="pCC to DCC here 1",
+        is_temporary=True
+    )
+    pCC_to_DCC_2 = State(
+        name="pCC_to_DCC_2",
+        description="pCC to DCC here 2",
+        is_temporary=True
+    )
+    pCC_to_DCC_3 = State(
+        name="pCC_to_DCC_3",
+        description="pCC to DCC here 3",
+        is_temporary=True
+    )
+    pCC_to_DCC_3.add_transition(
+        sDCC,
+        probability_func=lambda cycle, p: params.True_pos_cc,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_Diag, params.DR, cycle)
+    )
+    pCC_to_DCC_3.add_transition(
+        pDCC,
+        probability_func=lambda cycle, p: 1 - params.True_pos_cc
+    )
+    pCC_to_DCC_2.add_transition(
+        pCC_to_DCC_3,
+        probability_func=lambda cycle, p: params.Rate_screening2,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_AFP + params.Cost_US, params.DR, cycle)
+    )
+    pCC_to_DCC_2.add_transition(
+        pDCC,
+        probability_func=lambda cycle, p: 1 - params.Rate_screening2
+    )
+    pCC_to_DCC_1.add_transition(
+        pCC_to_DCC_2,
+        probability_func=lambda cycle, p: params.Posrate_highrisk
+    )
+    pCC_to_DCC_1.add_transition(
+        pDCC,
+        probability_func=lambda cycle, p: 1 - params.Posrate_highrisk
+    )
+    pCC_to_DCC.add_transition(
+        pCC_to_DCC_1,
+        probability_func=lambda cycle, p: 1,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_HBsAgque, params.DR, cycle)
+    )
+    pCC_to_DCC.add_transition(
+        pDCC,
+        probability_func=lambda cycle, p: 0
+    )
+    pCC_to_HCCI = State(
+        name="pCC_to_HCCI",
         description="pCC screening CC_to_HCCI",
         is_temporary=True
     )
-    pCC_stemp1.add_transition(
-        sCC,
-        probability_func=lambda cycle, p: params.True_pos_cc * params.Rate_screening2
+    pCC_to_HCCI_1 = State(
+        name="pCC_to_HCCI_1",
+        description="pCC to HCCI here 1",
+        is_temporary=True
     )
-    pCC_stemp1.add_transition(
-        pCC,
-        probability_func=lambda cycle, p: 1 - params.True_pos_cc * params.Rate_screening2
+    pCC_to_HCCI_2 = State(
+        name="pCC_to_HCCI_2",
+        description="pCC to HCCI here 2",
+        is_temporary=True
     )
-    pCC_stemp2.add_transition(
-        sDCC,
-        probability_func=lambda cycle, p: params.True_pos_cc * params.Rate_screening2
+    pCC_to_HCCI_3 = State(
+        name="pCC_to_HCCI_3",
+        description="pCC to HCCI here 3",
+        is_temporary=True
     )
-    pCC_stemp2.add_transition(
-        pDCC,
-        probability_func=lambda cycle, p: 1 - params.True_pos_cc * params.Rate_screening2
-    )
-    pCC_stemp3.add_transition(
+    pCC_to_HCCI_3.add_transition(
         sHCCI,
-        probability_func=lambda cycle, p: params.True_pos_AFP_USearly * params.Rate_screening2
+        probability_func=lambda cycle, p: params.True_pos_AFP_USearly,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_Diag, params.DR, cycle)
     )
-    pCC_stemp3.add_transition(
+    pCC_to_HCCI_3.add_transition(
         pHCCI,
-        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly * params.Rate_screening2
+        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly
+    )
+    pCC_to_HCCI_2.add_transition(
+        pCC_to_HCCI_3,
+        probability_func=lambda cycle, p: params.Rate_screening2,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_AFP + params.Cost_US, params.DR, cycle)
+    )
+    pCC_to_HCCI_2.add_transition(
+        pHCCI,
+        probability_func=lambda cycle, p: 1 - params.Rate_screening2
+    )
+    pCC_to_HCCI_1.add_transition(
+        pCC_to_HCCI_2,
+        probability_func=lambda cycle, p: params.Posrate_highrisk
+    )
+    pCC_to_HCCI_1.add_transition(
+        pHCCI,
+        probability_func=lambda cycle, p: 1 - params.Posrate_highrisk
+    )
+    pCC_to_HCCI.add_transition(
+        pCC_to_HCCI_1,
+        probability_func=lambda cycle, p: 1,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_HBsAgque, params.DR, cycle)
+    )
+    pCC_to_HCCI.add_transition(
+        pHCCI,
+        probability_func=lambda cycle, p: 0
     )
     pCC_shaicha.add_transition(
         death,
         probability_func=lambda cycle, p: params.get(key="p_Death", index=cycle)
     )
     pCC_shaicha.add_transition(
-        pCC_stemp3,
+        pCC_to_HCCI,
         probability_func=lambda cycle, p: params.get(key="p_CC_PHCCI", index=cycle),
-        transition_cost_func=lambda cycle, p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_I
     )
     pCC_shaicha.add_transition(
-        pCC_stemp2,
+        pCC_to_DCC,
         probability_func=lambda cycle, p: params.get(key="p_CC_DCC", index=cycle),
-        transition_cost_func=lambda cycle, p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_DCC
-
     )
     pCC_shaicha.add_transition(
-        pCC_stemp1,
+        pCC_stay,
         probability_func=lambda cycle, p: 1 - params.get(key="p_Death", index=cycle) - params.get(key="p_CC_PHCCI", index=cycle) - params.get(key="p_CC_DCC", index=cycle),
-        transition_cost_func=lambda cycle, p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_CC
     )
     # endregion
     # region ===== pCC 不筛查分支 =====
@@ -1056,49 +1275,129 @@ def my_treeage_shaicha():
     )
     # endregion
     # region ===== pDCC 筛查分支 =====
-    pDCC_stemp1 = State(
-        name="pDCC_stemp1",
+    pDCC_stay = State(
+        name="pDCC_stay",
         description="pDCC screening stay here",
         is_temporary=True
     )
-    pDCC_stemp1.add_transition(
+    pDCC_stay_1 = State(
+        name="pDCC_stay_1",
+        description="pDCC stay here 1",
+        is_temporary=True
+    )
+    pDCC_stay_2 = State(
+        name="pDCC_stay_2",
+        description="pDCC stay here 2",
+        is_temporary=True
+    )
+    pDCC_stay_3 = State(
+        name="pDCC_stay_3",
+        description="pDCC stay here 3",
+        is_temporary=True
+    )
+    pDCC_stay_3.add_transition(
         sDCC,
-        probability_func=lambda cycle, p: params.True_pos_cc * params.Rate_screening2
+        probability_func=lambda cycle, p: params.True_pos_cc,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_Diag, params.DR, cycle)
     )
-    pDCC_stemp1.add_transition(
+    pDCC_stay_3.add_transition(
         pDCC,
-        probability_func=lambda cycle, p: 1 - params.True_pos_cc * params.Rate_screening2
+        probability_func=lambda cycle, p: 1 - params.True_pos_cc
     )
-    pDCC_stemp2 = State(
-        name="pDCC_stemp2",
+    pDCC_stay_2.add_transition(
+        pDCC_stay_3,
+        probability_func=lambda cycle, p: params.Rate_screening2,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_AFP + params.Cost_US, params.DR, cycle)
+    )
+    pDCC_stay_2.add_transition(
+        pDCC,
+        probability_func=lambda cycle, p: 1 - params.Rate_screening2
+    )
+    pDCC_stay_1.add_transition(
+        pDCC_stay_2,
+        probability_func=lambda cycle, p: params.Posrate_highrisk
+    )
+    pDCC_stay_1.add_transition(
+        pDCC,
+        probability_func=lambda cycle, p: 1 - params.Posrate_highrisk
+    )
+    pDCC_stay.add_transition(
+        pDCC_stay_1,
+        probability_func=lambda cycle, p: 1,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_HBsAgque, params.DR, cycle)
+    )
+    pDCC_stay.add_transition(
+        pDCC,
+        probability_func=lambda cycle, p: 0
+    )
+
+    pDCC_to_pHCCI = State(
+        name="pDCC_to_pHCCI",
         description="pDCC screening DCC_to_pHCCI",
         is_temporary=True
     )
-    pDCC_stemp2.add_transition(
+    pDCC_to_pHCCI_1 = State(
+        name="pDCC_to_pHCCI_1",
+        description="pDCC to pHCCI here 1",
+        is_temporary=True
+    )
+    pDCC_to_pHCCI_2 = State(
+        name="pDCC_to_pHCCI_2",
+        description="pDCC to pHCCI here 2",
+        is_temporary=True
+    )
+    pDCC_to_pHCCI_3 = State(
+        name="pDCC_to_pHCCI_3",
+        description="pDCC to pHCCI here 3",
+        is_temporary=True
+    )
+    pDCC_to_pHCCI_3.add_transition(
         sHCCI,
-        probability_func=lambda cycle, p: params.True_pos_AFP_USearly * params.Rate_screening2
+        probability_func=lambda cycle, p: params.True_pos_AFP_USearly,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_Diag, params.DR, cycle)
     )
-    pDCC_stemp2.add_transition(
+    pDCC_to_pHCCI_3.add_transition(
         pHCCI,
-        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly * params.Rate_screening2
+        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly
     )
+    pDCC_to_pHCCI_2.add_transition(
+        pDCC_to_pHCCI_3,
+        probability_func=lambda cycle, p: params.Rate_screening2,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_AFP + params.Cost_US, params.DR, cycle)
+    )
+    pDCC_to_pHCCI_2.add_transition(
+        pHCCI,
+        probability_func=lambda cycle, p: 1 - params.Rate_screening2
+    )
+    pDCC_to_pHCCI_1.add_transition(
+        pDCC_to_pHCCI_2,
+        probability_func=lambda cycle, p: params.Posrate_highrisk
+    )
+    pDCC_to_pHCCI_1.add_transition(
+        pHCCI,
+        probability_func=lambda cycle, p: 1 - params.Posrate_highrisk
+    )
+    pDCC_to_pHCCI.add_transition(
+        pDCC_to_pHCCI_1,
+        probability_func=lambda cycle, p: 1,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_HBsAgque, params.DR, cycle)
+    )
+    pDCC_to_pHCCI.add_transition(
+        pHCCI,
+        probability_func=lambda cycle, p: 0
+    )
+
     pDCC_shaicha.add_transition(
         death,
         probability_func=lambda cycle, p: params.get(key="p_Death", index=cycle)
     )
     pDCC_shaicha.add_transition(
-        pDCC_stemp2,
+        pDCC_to_pHCCI,
         probability_func=lambda cycle, p: params.get(key="p_DCC_PHCCI", index=cycle),
-        transition_cost_func=lambda cycle,
-                                    p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_I
-
     )
     pDCC_shaicha.add_transition(
-        pDCC_stemp1,
+        pDCC_stay,
         probability_func=lambda cycle, p: 1 - params.get(key="p_DCC_PHCCI", index=cycle) - params.get(key="p_Death", index=cycle),
-        transition_cost_func=lambda cycle,
-                                    p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_DCC
-
     )
     # endregion
     # region ===== pDCC 不筛查分支 =====
@@ -1170,39 +1469,166 @@ def my_treeage_shaicha():
         description="pHCCI screening stay here",
         is_temporary=True
     )
-    pHCCI_s_stay.add_transition(
+    pHCCI_s_stay_1 = State(
+        name="pHCCI_s_stay_1",
+        description="pHCCI stay here 1",
+        is_temporary=True
+    )
+    pHCCI_s_stay_2 = State(
+        name="pHCCI_s_stay_2",
+        description="pHCCI stay here 2",
+        is_temporary=True
+    )
+    pHCCI_s_stay_3 = State(
+        name="pHCCI_s_stay_3",
+        description="pHCCI stay here 3",
+        is_temporary=True
+    )
+    pHCCI_s_stay_3.add_transition(
         sHCCI,
-        probability_func=lambda cycle, p: params.True_pos_AFP_USearly * params.Rate_screening2
+        probability_func=lambda cycle, p: params.True_pos_AFP_USearly,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_Diag, params.DR, cycle)
+    )
+    pHCCI_s_stay_3.add_transition(
+        pHCCI,
+        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly
+    )
+    pHCCI_s_stay_2.add_transition(
+        pHCCI_s_stay_3,
+        probability_func=lambda cycle, p: params.Rate_screening2,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_AFP + params.Cost_US, params.DR, cycle)
+    )
+    pHCCI_s_stay_2.add_transition(
+        pHCCI,
+        probability_func=lambda cycle, p: 1 - params.Rate_screening2
+    )
+    pHCCI_s_stay_1.add_transition(
+        pHCCI_s_stay_2,
+        probability_func=lambda cycle, p: params.Posrate_highrisk
+    )
+    pHCCI_s_stay_1.add_transition(
+        pHCCI,
+        probability_func=lambda cycle, p: 1 - params.Posrate_highrisk
+    )
+    pHCCI_s_stay.add_transition(
+        pHCCI_s_stay_1,
+        probability_func=lambda cycle, p: 1,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_HBsAgque, params.DR, cycle)
     )
     pHCCI_s_stay.add_transition(
         pHCCI,
-        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly * params.Rate_screening2
+        probability_func=lambda cycle, p: 0
     )
+
     pHCCI_s_to_pII = State(
         name="pHCCI_s_to_pII",
         description="pHCCI screening pHCCI_to_pHCCII",
         is_temporary=True
     )
-    pHCCI_s_to_pII.add_transition(
+    pHCCI_s_to_pII_1 = State(
+        name="pHCCI_s_to_pII_1",
+        description="pHCCI to pII here 1",
+        is_temporary=True
+    )
+    pHCCI_s_to_pII_2 = State(
+        name="pHCCI_s_to_pII_2",
+        description="pHCCI to pII here 2",
+        is_temporary=True
+    )
+    pHCCI_s_to_pII_3 = State(
+        name="pHCCI_s_to_pII_3",
+        description="pHCCI to pII here 3",
+        is_temporary=True
+    )
+    pHCCI_s_to_pII_3.add_transition(
         sHCCII,
-        probability_func=lambda cycle, p: params.True_pos_AFP_USearly * params.Rate_screening2
+        probability_func=lambda cycle, p: params.True_pos_AFP_USearly,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_Diag, params.DR, cycle)
+    )
+    pHCCI_s_to_pII_3.add_transition(
+        pHCCII,
+        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly
+    )
+    pHCCI_s_to_pII_2.add_transition(
+        pHCCI_s_to_pII_3,
+        probability_func=lambda cycle, p: params.Rate_screening2,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_AFP + params.Cost_US, params.DR, cycle)
+    )
+    pHCCI_s_to_pII_2.add_transition(
+        pHCCII,
+        probability_func=lambda cycle, p: 1 - params.Rate_screening2
+    )
+    pHCCI_s_to_pII_1.add_transition(
+        pHCCI_s_to_pII_2,
+        probability_func=lambda cycle, p: params.Posrate_highrisk
+    )
+    pHCCI_s_to_pII_1.add_transition(
+        pHCCII,
+        probability_func=lambda cycle, p: 1 - params.Posrate_highrisk
+    )
+    pHCCI_s_to_pII.add_transition(
+        pHCCI_s_to_pII_1,
+        probability_func=lambda cycle, p: 1,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_HBsAgque, params.DR, cycle)
     )
     pHCCI_s_to_pII.add_transition(
         pHCCII,
-        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly * params.Rate_screening2
+        probability_func=lambda cycle, p: 0
     )
     pHCCI_s_to_cI = State(
         name="pHCCI_s_to_cI",
         description="pHCCI screening pHCCI_to_cHCCI",
         is_temporary=True
     )
-    pHCCI_s_to_cI.add_transition(
+    pHCCI_s_to_cI_1 = State(
+        name="pHCCI_s_to_cI_1",
+        description="pHCCI to cI here 1",
+        is_temporary=True
+    )
+    pHCCI_s_to_cI_2 = State(
+        name="pHCCI_s_to_cI_2",
+        description="pHCCI to cI here 2",
+        is_temporary=True
+    )
+    pHCCI_s_to_cI_3 = State(
+        name="pHCCI_s_to_cI_3",
+        description="pHCCI to cI here 3",
+        is_temporary=True
+    )
+    pHCCI_s_to_cI_3.add_transition(
         sHCCI,
-        probability_func=lambda cycle, p: params.True_pos_AFP_USearly * params.Rate_screening2
+        probability_func=lambda cycle, p: params.True_pos_AFP_USearly,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_Diag, params.DR, cycle)
+    )
+    pHCCI_s_to_cI_3.add_transition(
+        cHCCI,
+        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly
+    )
+    pHCCI_s_to_cI_2.add_transition(
+        pHCCI_s_to_cI_3,
+        probability_func=lambda cycle, p: params.Rate_screening2,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_AFP + params.Cost_US, params.DR, cycle)
+    )
+    pHCCI_s_to_cI_2.add_transition(
+        cHCCI,
+        probability_func=lambda cycle, p: 1 - params.Rate_screening2
+    )
+    pHCCI_s_to_cI_1.add_transition(
+        pHCCI_s_to_cI_2,
+        probability_func=lambda cycle, p: params.Posrate_highrisk
+    )
+    pHCCI_s_to_cI_1.add_transition(
+        cHCCI,
+        probability_func=lambda cycle, p: 1 - params.Posrate_highrisk
+    )
+    pHCCI_s_to_cI.add_transition(
+        pHCCI_s_to_cI_1,
+        probability_func=lambda cycle, p: 1,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_HBsAgque, params.DR, cycle)
     )
     pHCCI_s_to_cI.add_transition(
         cHCCI,
-        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly * params.Rate_screening2
+        probability_func=lambda cycle, p: 0
     )
     pHCCI_shaicha.add_transition(
         death,
@@ -1211,23 +1637,15 @@ def my_treeage_shaicha():
     pHCCI_shaicha.add_transition(
         pHCCI_s_to_cI,
         probability_func=lambda cycle, p: params.get(key="p_HCCI_Detected", index=int(cycle // 5 * 5)),
-        transition_cost_func=lambda cycle,
-                                    p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_I
-
     )
     pHCCI_shaicha.add_transition(
         pHCCI_s_to_pII,
         probability_func=lambda cycle, p: params.get(key="p_HCCI_HCCII", index=cycle),
-        transition_cost_func=lambda cycle,
-                                    p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_I
-
     )
     pHCCI_shaicha.add_transition(
         pHCCI_s_stay,
         probability_func=lambda cycle, p: 1 - params.get(key="p_HCCI_HCCII", index=cycle) -
                                           params.get(key="p_HCCI_Detected", index=int(cycle // 5 * 5)) - params.get(key="p_Death", index=cycle),
-        transition_cost_func=lambda cycle,
-                                    p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_I
     )
     # endregion
     # region ===== 临床前I期不筛查分支 =====
@@ -1255,39 +1673,165 @@ def my_treeage_shaicha():
         description="pHCCII screening stay here",
         is_temporary=True
     )
-    pHCCII_s_stay.add_transition(
+    pHCCII_s_stay_1 = State(
+        name="pHCCII_s_stay_1",
+        description="pHCCII stay here 1",
+        is_temporary=True
+    )
+    pHCCII_s_stay_2 = State(
+        name="pHCCII_s_stay_2",
+        description="pHCCII stay here 2",
+        is_temporary=True
+    )
+    pHCCII_s_stay_3 = State(
+        name="pHCCII_s_stay_3",
+        description="pHCCII stay here 3",
+        is_temporary=True
+    )
+    pHCCII_s_stay_3.add_transition(
         sHCCII,
-        probability_func=lambda cycle, p: params.True_pos_AFP_USearly * params.Rate_screening2
+        probability_func=lambda cycle, p: params.True_pos_AFP_USearly,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_Diag, params.DR, cycle)
+    )
+    pHCCII_s_stay_3.add_transition(
+        pHCCII,
+        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly
+    )
+    pHCCII_s_stay_2.add_transition(
+        pHCCII_s_stay_3,
+        probability_func=lambda cycle, p: params.Rate_screening2,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_AFP + params.Cost_US, params.DR, cycle)
+    )
+    pHCCII_s_stay_2.add_transition(
+        pHCCII,
+        probability_func=lambda cycle, p: 1 - params.Rate_screening2
+    )
+    pHCCII_s_stay_1.add_transition(
+        pHCCII_s_stay_2,
+        probability_func=lambda cycle, p: params.Posrate_highrisk
+    )
+    pHCCII_s_stay_1.add_transition(
+        pHCCII,
+        probability_func=lambda cycle, p: 1 - params.Posrate_highrisk
+    )
+    pHCCII_s_stay.add_transition(
+        pHCCII_s_stay_1,
+        probability_func=lambda cycle, p: 1,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_HBsAgque, params.DR, cycle)
     )
     pHCCII_s_stay.add_transition(
         pHCCII,
-        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly * params.Rate_screening2
+        probability_func=lambda cycle, p: 0
     )
     pHCCII_s_to_pIII = State(
         name="pHCCII_s_to_pIII",
         description="pHCCII screening pHCCII_to_pHCCIII",
         is_temporary=True
     )
-    pHCCII_s_to_pIII.add_transition(
+    pHCCII_s_to_pIII_1 = State(
+        name="pHCCII_s_to_pIII_1",
+        description="pHCCII to pIII here 1",
+        is_temporary=True
+    )
+    pHCCII_s_to_pIII_2 = State(
+        name="pHCCII_s_to_pIII_2",
+        description="pHCCII to pIII here 2",
+        is_temporary=True
+    )
+    pHCCII_s_to_pIII_3 = State(
+        name="pHCCII_s_to_pIII_3",
+        description="pHCCII to pIII here 3",
+        is_temporary=True
+    )
+    pHCCII_s_to_pIII_3.add_transition(
         sHCCIII,
-        probability_func=lambda cycle, p: params.True_pos_AFP_USlate * params.Rate_screening2
+        probability_func=lambda cycle, p: params.True_pos_AFP_USlate,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_Diag, params.DR, cycle)
+    )
+    pHCCII_s_to_pIII_3.add_transition(
+        pHCCIII,
+        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USlate
+    )
+    pHCCII_s_to_pIII_2.add_transition(
+        pHCCII_s_to_pIII_3,
+        probability_func=lambda cycle, p: params.Rate_screening2,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_AFP + params.Cost_US, params.DR, cycle)
+    )
+    pHCCII_s_to_pIII_2.add_transition(
+        pHCCIII,
+        probability_func=lambda cycle, p: 1 - params.Rate_screening2
+    )
+    pHCCII_s_to_pIII_1.add_transition(
+        pHCCII_s_to_pIII_2,
+        probability_func=lambda cycle, p: params.Posrate_highrisk
+    )
+    pHCCII_s_to_pIII_1.add_transition(
+        pHCCIII,
+        probability_func=lambda cycle, p: 1 - params.Posrate_highrisk
     )
     pHCCII_s_to_pIII.add_transition(
-        pHCCIII,
-        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USlate * params.Rate_screening2
+        pHCCII_s_to_pIII_1,
+        probability_func=lambda cycle, p: 1,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_HBsAgque, params.DR, cycle)
+    )
+    pHCCII_s_to_pIII.add_transition(
+        pHCCII,
+        probability_func=lambda cycle, p: 0
     )
     pHCCII_s_to_cII = State(
         name="pHCCII_s_to_cII",
         description="pHCCII screening pHCCII_to_cHCCII",
         is_temporary=True
     )
-    pHCCII_s_to_cII.add_transition(
+    pHCCII_s_to_cII_1 = State(
+        name="pHCCII_s_to_cII_1",
+        description="pHCCII to cII here 1",
+        is_temporary=True
+    )
+    pHCCII_s_to_cII_2 = State(
+        name="pHCCII_s_to_cII_2",
+        description="pHCCII to cII here 2",
+        is_temporary=True
+    )
+    pHCCII_s_to_cII_3 = State(
+        name="pHCCII_s_to_cII_3",
+        description="pHCCII to cII here 3",
+        is_temporary=True
+    )
+    pHCCII_s_to_cII_3.add_transition(
         sHCCII,
-        probability_func=lambda cycle, p: params.True_pos_AFP_USearly * params.Rate_screening2
+        probability_func=lambda cycle, p: params.True_pos_AFP_USearly,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_Diag, params.DR, cycle)
+    )
+    pHCCII_s_to_cII_3.add_transition(
+        cHCCII,
+        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly
+    )
+    pHCCII_s_to_cII_2.add_transition(
+        pHCCII_s_to_cII_3,
+        probability_func=lambda cycle, p: params.Rate_screening2,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_AFP + params.Cost_US, params.DR, cycle)
+    )
+    pHCCII_s_to_cII_2.add_transition(
+        cHCCII,
+        probability_func=lambda cycle, p: 1 - params.Rate_screening2
+    )
+    pHCCII_s_to_cII_1.add_transition(
+        pHCCII_s_to_cII_2,
+        probability_func=lambda cycle, p: params.Posrate_highrisk
+    )
+    pHCCII_s_to_cII_1.add_transition(
+        cHCCII,
+        probability_func=lambda cycle, p: 1 - params.Posrate_highrisk
     )
     pHCCII_s_to_cII.add_transition(
-        cHCCII,
-        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly * params.Rate_screening2
+        pHCCII_s_to_cII_1,
+        probability_func=lambda cycle, p: 1,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_HBsAgque, params.DR, cycle)
+    )
+    pHCCII_s_to_cII.add_transition(
+        pHCCII,
+        probability_func=lambda cycle, p: 0
     )
     pHCCII_shaicha.add_transition(
         death,
@@ -1296,21 +1840,15 @@ def my_treeage_shaicha():
     pHCCII_shaicha.add_transition(
         pHCCII_s_to_cII,
         probability_func=lambda cycle, p: params.get(key="p_HCCII_Detected", index=int(cycle // 5 * 5)),
-        transition_cost_func=lambda cycle,
-                                    p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_II
     )
     pHCCII_shaicha.add_transition(
         pHCCII_s_to_pIII,
         probability_func=lambda cycle, p: params.get(key="p_HCCII_HCCIII", index=cycle),
-        transition_cost_func=lambda cycle,
-                                    p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_II
     )
     pHCCII_shaicha.add_transition(
         pHCCII_s_stay,
         probability_func=lambda cycle, p: 1 - params.get(key="p_HCCII_HCCIII", index=cycle) - params.get(
             key="p_HCCII_Detected", index=int(cycle // 5 * 5)) - params.get(key="p_Death", index=cycle),
-        transition_cost_func=lambda cycle, p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_II
-
     )
     # endregion
     # region ===== 临床前II期不筛查分支 =====
@@ -1338,39 +1876,165 @@ def my_treeage_shaicha():
         description="pHCCIII screening stay here",
         is_temporary=True
     )
-    pHCCIII_s_stay.add_transition(
+    pHCCIII_s_stay_1 = State(
+        name="pHCCIII_s_stay_1",
+        description="pHCCIII stay here 1",
+        is_temporary=True
+    )
+    pHCCIII_s_stay_2 = State(
+        name="pHCCIII_s_stay_2",
+        description="pHCCIII stay here 2",
+        is_temporary=True
+    )
+    pHCCIII_s_stay_3 = State(
+        name="pHCCIII_s_stay_3",
+        description="pHCCIII stay here 3",
+        is_temporary=True
+    )
+    pHCCIII_s_stay_3.add_transition(
         sHCCIII,
-        probability_func=lambda cycle, p: params.True_pos_AFP_USlate * params.Rate_screening2
+        probability_func=lambda cycle, p: params.True_pos_AFP_USlate,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_Diag, params.DR, cycle)
+    )
+    pHCCIII_s_stay_3.add_transition(
+        pHCCIII,
+        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USlate
+    )
+    pHCCIII_s_stay_2.add_transition(
+        pHCCIII_s_stay_3,
+        probability_func=lambda cycle, p: params.Rate_screening2,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_AFP + params.Cost_US, params.DR, cycle)
+    )
+    pHCCIII_s_stay_2.add_transition(
+        pHCCIII,
+        probability_func=lambda cycle, p: 1 - params.Rate_screening2
+    )
+    pHCCIII_s_stay_1.add_transition(
+        pHCCIII_s_stay_2,
+        probability_func=lambda cycle, p: params.Posrate_highrisk
+    )
+    pHCCIII_s_stay_1.add_transition(
+        pHCCIII,
+        probability_func=lambda cycle, p: 1 - params.Posrate_highrisk
+    )
+    pHCCIII_s_stay.add_transition(
+        pHCCIII_s_stay_1,
+        probability_func=lambda cycle, p: 1,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_HBsAgque, params.DR, cycle)
     )
     pHCCIII_s_stay.add_transition(
         pHCCIII,
-        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USlate * params.Rate_screening2
+        probability_func=lambda cycle, p: 0
     )
     pHCCIII_s_to_pIV = State(
         name="pHCCIII_s_to_pIV",
         description="pHCCIII screening pHCCIII_to_pHCCIV",
         is_temporary=True
     )
-    pHCCIII_s_to_pIV.add_transition(
+    pHCCIII_s_to_pIV_1 = State(
+        name="pHCCIII_s_to_pIV_1",
+        description="pHCCIII to pIV 1",
+        is_temporary=True
+    )
+    pHCCIII_s_to_pIV_2 = State(
+        name="pHCCIII_s_to_pIV_2",
+        description="pHCCIII to pIV 2",
+        is_temporary=True
+    )
+    pHCCIII_s_to_pIV_3 = State(
+        name="pHCCIII_s_to_pIV_3",
+        description="pHCCIII to pIV 3",
+        is_temporary=True
+    )
+    pHCCIII_s_to_pIV_3.add_transition(
         sHCCIV,
-        probability_func=lambda cycle, p: params.True_pos_AFP_USlate * params.Rate_screening2
+        probability_func=lambda cycle, p: params.True_pos_AFP_USlate,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_Diag, params.DR, cycle)
+    )
+    pHCCIII_s_to_pIV_3.add_transition(
+        pHCCIV,
+        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USlate
+    )
+    pHCCIII_s_to_pIV_2.add_transition(
+        pHCCIII_s_to_pIV_3,
+        probability_func=lambda cycle, p: params.Rate_screening2,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_AFP + params.Cost_US, params.DR, cycle)
+    )
+    pHCCIII_s_to_pIV_2.add_transition(
+        pHCCIV,
+        probability_func=lambda cycle, p: 1 - params.Rate_screening2
+    )
+    pHCCIII_s_to_pIV_1.add_transition(
+        pHCCIII_s_to_pIV_2,
+        probability_func=lambda cycle, p: params.Posrate_highrisk
+    )
+    pHCCIII_s_to_pIV_1.add_transition(
+        pHCCIV,
+        probability_func=lambda cycle, p: 1 - params.Posrate_highrisk
+    )
+    pHCCIII_s_to_pIV.add_transition(
+        pHCCIII_s_to_pIV_1,
+        probability_func=lambda cycle, p: 1,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_HBsAgque, params.DR, cycle)
     )
     pHCCIII_s_to_pIV.add_transition(
         pHCCIV,
-        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USlate * params.Rate_screening2
+        probability_func=lambda cycle, p: 0
     )
     pHCCIII_ns_to_cIII = State(
         name="pHCCIII_ns_to_cIII",
         description="pHCCIII screening pHCCII_to_cHCCIII",
         is_temporary=True
     )
-    pHCCIII_ns_to_cIII.add_transition(
+    pHCCIII_ns_to_cIII_1 = State(
+        name="pHCCIII_ns_to_cIII_1",
+        description="pHCCIII to cIII 1",
+        is_temporary=True
+    )
+    pHCCIII_ns_to_cIII_2 = State(
+        name="pHCCIII_ns_to_cIII_2",
+        description="pHCCIII to cIII 2",
+        is_temporary=True
+    )
+    pHCCIII_ns_to_cIII_3 = State(
+        name="pHCCIII_ns_to_cIII_3",
+        description="pHCCIII to cIII 3",
+        is_temporary=True
+    )
+    pHCCIII_ns_to_cIII_3.add_transition(
         sHCCIII,
-        probability_func=lambda cycle, p: params.True_pos_AFP_USearly * params.Rate_screening2
+        probability_func=lambda cycle, p: params.True_pos_AFP_USearly,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_Diag, params.DR, cycle)
+    )
+    pHCCIII_ns_to_cIII_3.add_transition(
+        cHCCIII,
+        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly
+    )
+    pHCCIII_ns_to_cIII_2.add_transition(
+        pHCCIII_ns_to_cIII_3,
+        probability_func=lambda cycle, p: params.Rate_screening2,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_AFP + params.Cost_US, params.DR, cycle)
+    )
+    pHCCIII_ns_to_cIII_2.add_transition(
+        cHCCIII,
+        probability_func=lambda cycle, p: 1 - params.Rate_screening2
+    )
+    pHCCIII_ns_to_cIII_1.add_transition(
+        pHCCIII_ns_to_cIII_2,
+        probability_func=lambda cycle, p: params.Posrate_highrisk
+    )
+    pHCCIII_ns_to_cIII_1.add_transition(
+        cHCCIII,
+        probability_func=lambda cycle, p: 1 - params.Posrate_highrisk
+    )
+    pHCCIII_ns_to_cIII.add_transition(
+        pHCCIII_ns_to_cIII_1,
+        probability_func=lambda cycle, p: 1,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_HBsAgque, params.DR, cycle)
     )
     pHCCIII_ns_to_cIII.add_transition(
         cHCCIII,
-        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly * params.Rate_screening2
+        probability_func=lambda cycle, p: 0
     )
     pHCCIII_shaicha.add_transition(
         death,
@@ -1420,26 +2084,110 @@ def my_treeage_shaicha():
         description="pHCCIV screening stay here",
         is_temporary=True
     )
-    pHCCIV_s_stay.add_transition(
+    pHCCIV_s_stay_1 = State(
+        name="pHCCIV_s_stay_1",
+        description="pHCCIV stay 1",
+        is_temporary=True
+    )
+    pHCCIV_s_stay_2 = State(
+        name="pHCCIV_s_stay_2",
+        description="pHCCIV stay 2",
+        is_temporary=True
+    )
+    pHCCIV_s_stay_3 = State(
+        name="pHCCIV_s_stay_3",
+        description="pHCCIV stay 3",
+        is_temporary=True
+    )
+    pHCCIV_s_stay_3.add_transition(
         sHCCIV,
-        probability_func=lambda cycle, p: params.True_pos_AFP_USlate * params.Rate_screening2
+        probability_func=lambda cycle, p: params.True_pos_AFP_USlate,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_Diag, params.DR, cycle)
+    )
+    pHCCIV_s_stay_3.add_transition(
+        pHCCIV,
+        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USlate
+    )
+    pHCCIV_s_stay_2.add_transition(
+        pHCCIV_s_stay_3,
+        probability_func=lambda cycle, p: params.Rate_screening2,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_AFP + params.Cost_US, params.DR, cycle)
+    )
+    pHCCIV_s_stay_2.add_transition(
+        pHCCIV,
+        probability_func=lambda cycle, p: 1 - params.Rate_screening2
+    )
+    pHCCIV_s_stay_1.add_transition(
+        pHCCIV_s_stay_2,
+        probability_func=lambda cycle, p: params.Posrate_highrisk
+    )
+    pHCCIV_s_stay_1.add_transition(
+        pHCCIV,
+        probability_func=lambda cycle, p: 1 - params.Posrate_highrisk
+    )
+    pHCCIV_s_stay.add_transition(
+        pHCCIV_s_stay_1,
+        probability_func=lambda cycle, p: 1,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_HBsAgque, params.DR, cycle)
     )
     pHCCIV_s_stay.add_transition(
         pHCCIV,
-        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USlate * params.Rate_screening2
+        probability_func=lambda cycle, p: 0
     )
     pHCCIV_s_to_cIV = State(
         name="pHCCIV_s_to_cIV",
         description="pHCCIV screening pHCCIV_to_cHCCIV",
         is_temporary=True
     )
-    pHCCIV_s_to_cIV.add_transition(
+    pHCCIV_s_to_cIV_1 = State(
+        name="pHCCIV_s_to_cIV_1",
+        description="pHCCIV to cIV 1",
+        is_temporary=True
+    )
+    pHCCIV_s_to_cIV_2 = State(
+        name="pHCCIV_s_to_cIV_2",
+        description="pHCCIV to cIV 2",
+        is_temporary=True
+    )
+    pHCCIV_s_to_cIV_3 = State(
+        name="pHCCIV_s_to_cIV_3",
+        description="pHCCIV to cIV 3",
+        is_temporary=True
+    )
+    pHCCIV_s_to_cIV_3.add_transition(
         sHCCIV,
-        probability_func=lambda cycle, p: params.True_pos_AFP_USearly * params.Rate_screening2
+        probability_func=lambda cycle, p: params.True_pos_AFP_USearly,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_Diag, params.DR, cycle)
+    )
+    pHCCIV_s_to_cIV_3.add_transition(
+        cHCCIV,
+        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly
+    )
+    pHCCIV_s_to_cIV_2.add_transition(
+        pHCCIV_s_to_cIV_3,
+        probability_func=lambda cycle, p: params.Rate_screening2,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_AFP + params.Cost_US, params.DR, cycle)
+    )
+    pHCCIV_s_to_cIV_2.add_transition(
+        cHCCIV,
+        probability_func=lambda cycle, p: 1 - params.Rate_screening2
+    )
+    pHCCIV_s_to_cIV_1.add_transition(
+        pHCCIV_s_to_cIV_2,
+        probability_func=lambda cycle, p: params.Posrate_highrisk
+    )
+    pHCCIV_s_to_cIV_1.add_transition(
+        cHCCIV,
+        probability_func=lambda cycle, p: 1 - params.Posrate_highrisk
+    )
+    pHCCIV_s_to_cIV.add_transition(
+        pHCCIV_s_to_cIV_1,
+        probability_func=lambda cycle, p: 1,
+        transition_cost_func=lambda cycle, p: discount(params.Cost_HBsAgque, params.DR, cycle)
     )
     pHCCIV_s_to_cIV.add_transition(
         cHCCIV,
-        probability_func=lambda cycle, p: 1 - params.True_pos_AFP_USearly * params.Rate_screening2
+        probability_func=lambda cycle, p: 0
     )
     pHCCIV_shaicha.add_transition(
         death,
@@ -1448,15 +2196,10 @@ def my_treeage_shaicha():
     pHCCIV_shaicha.add_transition(
         pHCCIV_s_to_cIV,
         probability_func=lambda cycle, p: params.get(key="p_HCCIV_Detected", index=int(cycle // 5 * 5)),
-        transition_cost_func=lambda cycle,
-                                    p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_IV
     )
     pHCCIV_shaicha.add_transition(
         pHCCIV_s_stay,
         probability_func=lambda cycle, p: 1 - params.get(key="p_HCCIV_Detected", index=int(cycle // 5 * 5)) - params.get(key="p_Death", index=cycle),
-        transition_cost_func=lambda cycle,
-                                    p: params.Cost_HBsAgque + params.Cost_AFP + params.Cost_US + params.Cost_Diag + params.Cost_Treat_IV
-
     )
     # endregion
     # region ===== 临床前IV期不筛查分支 =====
@@ -1727,37 +2470,8 @@ def my_treeage_shaicha():
     )
     # endregion
     model = MarkovModel(
-        states=[
-            death, death_dcc, death_hcc, death_cc,
-            Healthy, health_shaicha, health_noshaicha,
-            CHB, CHB_shaicha, CHB_noshaicha,
-            pCC, pCC_shaicha, pCC_noshaicha,
-            pDCC, pDCC_shaicha, pDCC_noshaicha,
-            pHCCI, pHCCI_shaicha, pHCCI_noshaicha,
-            pHCCII, pHCCII_shaicha, pHCCII_noshaicha,
-            pHCCIII, pHCCIII_shaicha, pHCCIII_noshaicha,
-            pHCCIV, pHCCIV_shaicha, pHCCIV_noshaicha,
-            cHCCI, cHCCII, cHCCIII, cHCCIV,
-            sHCCI, sHCCII, sHCCIII, sHCCIV,
-            sCC, sDCC, CC, DCC, tCC, tDCC,
-            cured,
-            pre_ps_HCCI,
-            pre_ps_CC, pre_ps_HCCI_1,
-            pCC_stemp1, pCC_stemp2, pCC_stemp3,
-            pCC_ns_live, pCC_ns_fx, pCC_ns_fx_nt, pCC_ns_nfx,
-            pDCC_stemp1, pDCC_stemp2,
-            pDCC_ns_live, pDCC_ns_live_fx, pDCC_ns_live_fx_nt, pDCC_ns_live_nfx,
-            pHCCI_s_stay, pHCCI_s_to_pII, pHCCI_s_to_cI,
-            pHCCII_s_stay, pHCCII_s_to_pIII, pHCCII_s_to_cII,
-            pHCCIII_s_stay, pHCCIII_s_to_pIV, pHCCIII_ns_to_cIII,
-            pHCCIV_s_stay, pHCCIV_s_to_cIV,
-            sCC_live, sCC_live_nt,
-            sDCC_live, sDCC_live_nt,
-            CC_live, CC_live_nt,
-            DCC_live, DCC_live_nt,
-            tCC_live,
-            tDCC_live,
-        ],
+        states=[death, death_hcc, death_dcc, death_cc, Healthy, CHB, CHB_shaicha, CHB_noshaicha, pCC, pCC_shaicha, pCC_noshaicha, pDCC, pDCC_shaicha, pDCC_noshaicha, cured, pHCCI, pHCCI_shaicha, pHCCI_noshaicha, pHCCII, pHCCII_shaicha, pHCCII_noshaicha, pHCCIII, pHCCIII_shaicha, pHCCIII_noshaicha, pHCCIV, pHCCIV_shaicha, pHCCIV_noshaicha, cHCCI, cHCCII, cHCCIII, cHCCIV, sHCCI, sHCCII, sHCCIII, sHCCIV, sCC, sDCC, CC, DCC, tCC, tDCC, pre_ps_CC, pre_ps_CC_1, pre_ps_CC_2, pre_ps_CC_3, pre_ps_HCCI, pre_ps_HCCI_1, pre_ps_HCCI_2, pre_ps_HCCI_3, CHB_stay, CHB_stay_1, CHB_stay_2, CHB_stay_3, pCC_stay, pCC_stay_1, pCC_stay_2, pCC_stay_3, pCC_to_DCC, pCC_to_DCC_1, pCC_to_DCC_2, pCC_to_DCC_3, pCC_to_HCCI, pCC_to_HCCI_1, pCC_to_HCCI_2, pCC_to_HCCI_3, pCC_ns_live, pCC_ns_fx, pCC_ns_fx_nt, pCC_ns_nfx, pDCC_stay, pDCC_stay_1, pDCC_stay_2, pDCC_stay_3, pDCC_to_pHCCI, pDCC_to_pHCCI_1, pDCC_to_pHCCI_2, pDCC_to_pHCCI_3, pDCC_ns_live, pDCC_ns_live_fx, pDCC_ns_live_fx_nt, pDCC_ns_live_nfx, pHCCI_s_stay, pHCCI_s_stay_1, pHCCI_s_stay_2, pHCCI_s_stay_3, pHCCI_s_to_pII, pHCCI_s_to_pII_1, pHCCI_s_to_pII_2, pHCCI_s_to_pII_3, pHCCI_s_to_cI, pHCCI_s_to_cI_1, pHCCI_s_to_cI_2, pHCCI_s_to_cI_3, pHCCII_s_stay, pHCCII_s_stay_1, pHCCII_s_stay_2, pHCCII_s_stay_3, pHCCII_s_to_pIII, pHCCII_s_to_pIII_1, pHCCII_s_to_pIII_2, pHCCII_s_to_pIII_3, pHCCII_s_to_cII, pHCCII_s_to_cII_1, pHCCII_s_to_cII_2, pHCCII_s_to_cII_3, pHCCIII_s_stay, pHCCIII_s_stay_1, pHCCIII_s_stay_2, pHCCIII_s_stay_3, pHCCIII_s_to_pIV, pHCCIII_s_to_pIV_1, pHCCIII_s_to_pIV_2, pHCCIII_s_to_pIV_3, pHCCIII_ns_to_cIII, pHCCIII_ns_to_cIII_1, pHCCIII_ns_to_cIII_2, pHCCIII_ns_to_cIII_3, pHCCIV_s_stay, pHCCIV_s_stay_1, pHCCIV_s_stay_2, pHCCIV_s_stay_3, pHCCIV_s_to_cIV, pHCCIV_s_to_cIV_1, pHCCIV_s_to_cIV_2, pHCCIV_s_to_cIV_3, sCC_live, sCC_live_nt, sDCC_live, sDCC_live_nt, CC_live, CC_live_nt, DCC_live, DCC_live_nt, tCC_live, tDCC_live],
+
         initial_distribution={"Healthy": 100000}
     )
 
@@ -1766,13 +2480,13 @@ def my_treeage_shaicha():
     model.run(cycles=84, params=params, cohort=True)
 
     np.set_printoptions(precision=3, suppress=True)
-    print(f"最终状态分布\nhealthy | CHB:\n {model.results['state_counts'][-1][[4, 7, 0]]}")
-    k = 10
-    print(f"前 {k} cycle 状态分布\nhealthy | CHB | death:")
+    print(f"最终状态分布\nhealthy | CHB | death | cured:\n {model.results['state_counts'][-1][[4, 5, 0, 14]]}")
+    k = 50
+    print(f"前 {k} cycle 状态分布\nhealthy | CHB | death | cured:")
     for i in range(k):
         tmp = model.results['state_counts'][i]
         tmp = np.array(tmp)
-        print(f"{tmp[[4, 7, 0]]}")
+        print(f"{tmp[[4, 5, 0, 14]]}")
 
     # 可视化状态分布随时间的变化
     plt.figure(figsize=(12, 16))

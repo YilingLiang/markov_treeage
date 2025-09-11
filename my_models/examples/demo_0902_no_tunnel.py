@@ -381,7 +381,7 @@ def my_treeage_shaicha():
     )
     # endregion
     # region ===== 健康状态 =====
-    from my_models.my_utils.utility import health_utility_func
+    from my_models.my_utils.utility import state_utility_func
     Healthy = State(
         name="Healthy",
         description="健康"

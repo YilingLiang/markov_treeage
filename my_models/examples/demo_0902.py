@@ -381,11 +381,11 @@ def my_treeage_shaicha():
     )
     # endregion
     # region ===== 健康状态 =====
-    from my_models.my_utils.utility import health_utility_func
+    from my_models.my_utils.utility import state_utility_func
     Healthy = State(
         name="Healthy",
         description="健康",
-        utility_func=lambda cycle, p: health_utility_func(params.U_health, params.DR, cycle),
+        utility_func=lambda cycle, p: state_utility_func(params.U_health, params.DR, cycle),
     )
     # endregion
 
@@ -947,7 +947,7 @@ def my_treeage_shaicha():
     model.run(cycles=84, params=params, cohort=True)
 
     np.set_printoptions(precision=3, suppress=True)
-    print(f"最终状态分布\nhealthy | CHB:\n {model.results['state_counts'][-1][[3, 4]]}")
+    print(f"最终状态分布\nhealthy | CHB:\n {model.results['state_counts'][-1][[3, 4, 0]]}")
     k = 10
     print(f"前 {k} cycle 状态分布\nhealthy | CHB | death:")
     for i in range(k):
