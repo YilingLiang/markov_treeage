@@ -161,7 +161,7 @@ class MarkovModel:
                      transition["transition_cost_func"],
                      transition["transition_utility_func"])
                     for transition in current_state.transitions
-                    if transition["condition"](cycle, params)
+                    if transition["condition"](cycle + 1, params)
                 ]
 
             # 验证转移概率和为1
@@ -312,7 +312,7 @@ class MarkovModel:
                         ]
 
                         # 计算总概率
-                        total_prob = sum(tran[1](t + 1, params)
+                        total_prob = sum(tran[1](t, params)
                                          for tran in applicable_transitions)
 
                         # 确保总概率为1
