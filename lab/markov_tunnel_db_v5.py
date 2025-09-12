@@ -395,12 +395,12 @@ class MarkovModel:
                         ]
 
                         # 计算总概率
-                        total_prob = sum(tran["probability_func"](t + 1, params)
+                        total_prob = sum(tran["probability_func"](t, params)
                                          for tran in applicable_transitions)
 
                         # 确保总概率为1
                         if not np.isclose(total_prob, 1.0, atol=1e-8):
-                            raise ValueError(f"周期{t + 1}，状态{state_name}转移概率和为{total_prob}，应等于1")
+                            raise ValueError(f"周期{t}，状态{state_name}转移概率和为{total_prob}，应等于1")
 
                         # 处理每个适用的转移
                         for transition in applicable_transitions:
@@ -471,7 +471,7 @@ class MarkovModel:
             if not cohort:
                 if not np.isclose(np.sum(next_state), np.sum(state_counts[t]), atol=1e-6):
                     raise ValueError(
-                        f"在周期{t + 1}，状态概率总和不守恒: {np.sum(next_state)} vs {np.sum(state_counts[t])}")
+                        f"在周期{t}，状态概率总和不守恒: {np.sum(next_state)} vs {np.sum(state_counts[t])}")
 
             # 更新状态分布
             state_counts[t + 1] = next_state

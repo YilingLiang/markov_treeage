@@ -1,6 +1,7 @@
 from lab.markov_tunnel_db_v5 import MarkovModel, State, discount
 from lab.condition import create_condition
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 if __name__ == "__main__":
@@ -29,7 +30,7 @@ if __name__ == "__main__":
         description="患病状态",
         cost_func=lambda cycle, p: 2000,
         utility_func=lambda cycle, p: 0.7,
-        tunnel_cycle=4,
+        tunnel_cycle=5,
     )
     # dtmp1 = State(
     #     name="Dtmp1",
@@ -150,7 +151,7 @@ if __name__ == "__main__":
 
     # 运行模型
     model.run(cycles=100, params=params, cohort=True)
-
+    np.set_printoptions(precision=3, suppress=True)
     # 分析结果
     print(f"总成本: {model.results['total_cost']:.2f}")
     print(f"总效用: {model.results['total_utility']:.2f}")
