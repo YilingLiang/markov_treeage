@@ -1,5 +1,6 @@
 from typing import Dict, Callable
 
+
 def create_condition(min_cycle: int = None, max_cycle: int = None) -> Callable:
     """
     创建状态转移条件函数

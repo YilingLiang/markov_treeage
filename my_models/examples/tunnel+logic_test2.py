@@ -30,7 +30,7 @@ if __name__ == "__main__":
         description="患病状态",
         cost_func=lambda cycle, p: 2000,
         utility_func=lambda cycle, p: 0.7,
-        tunnel_cycle=5,
+        tunnel_cycle=19,
     )
     # dtmp1 = State(
     #     name="Dtmp1",
