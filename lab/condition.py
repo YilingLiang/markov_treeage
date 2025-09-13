@@ -8,10 +8,6 @@ def create_condition(min_cycle: int = None, max_cycle: int = None) -> Callable:
     :param max_cycle: 最大模型时间（不包含）
     :return: 条件函数
     """
-    if min_cycle is not None:
-        min_cycle += 1
-    if max_cycle is not None:
-        max_cycle += 1
 
     def condition(cycle: int, params: Dict) -> bool:
         result = True
@@ -33,10 +29,6 @@ def create_condition_gq_leq(min_cycle: int = None, max_cycle: int = None, cycle_
     :param cycle_mode: and or
     :return: 条件函数
     """
-    if min_cycle is not None:
-        min_cycle += 1
-    if max_cycle is not None:
-        max_cycle += 1
 
     def condition(cycle: int, params: Dict) -> bool:
         result = True
