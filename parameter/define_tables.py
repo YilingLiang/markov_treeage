@@ -48,4 +48,4 @@ class Table:
 
 if __name__ == '__main__':
     table = Table({1: 0.3, 2: 0.6})
-    print(2 * table)
+    print(1/23.4 * table * 23.4)

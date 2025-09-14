@@ -6,6 +6,7 @@ plt.rcParams['font.sans-serif'] = ['SimHei']  # 使用黑体
 plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题
 debug = True
 
+
 class State:
     """定义状态或临时状态及其转移规则，包含tunnel机制"""
 
@@ -71,7 +72,7 @@ class State:
     def add_tunnel_transition(self, to_state: 'State',
                               probability_func: Callable[[int, Dict], float],
                               transition_cost_func: Callable[[int, Dict], float] = None,
-                              transition_utility_func: Callable[[int, Dict], float] = None,
+                              transition_utility_func: Callable[[int, Dict], float] = None
                               ):
         """
         添加tunnel机制的转移规则（含转移动作的成本和效用）
@@ -262,17 +263,6 @@ class MarkovModel:
                         total_prob = sum(tran["probability_func"](t, params)
                                          for tran in applicable_transitions)
 
-                        if debug and from_state.name not in ("Healthy",):
-                            applicable_transitions = [
-                                transition for transition in from_state.transitions
-                                if transition["condition"](t, params)
-                                   and not from_state.is_temporary
-                            ]
-                            for tran in applicable_transitions:
-                                if tran["to_state"].name == "CHB_shaicha" and t in (35, 36, 70):
-                                    print(t, ": ", state_name, "=>", tran["to_state"].name,
-                                          tran["probability_func"](t, params))
-
                         # 确保总概率为1
                         if not np.isclose(total_prob, 1.0, atol=1e-8):
                             raise ValueError(f"周期{t}，状态{state_name}转移概率和为{total_prob}，应等于1")
@@ -346,6 +336,7 @@ class MarkovModel:
         max_stay = state.tunnel_cycle if state.tunnel_cycle is not None else len(
             self.dwell_time_distributions[0][state_idx]) - 1
         return self.dwell_time_distributions[cycle][state_idx, :max_stay + 1]
+
 
 # 辅助函数：计算折扣值
 def discount(value: float, rate: float, cycle: int) -> float:
