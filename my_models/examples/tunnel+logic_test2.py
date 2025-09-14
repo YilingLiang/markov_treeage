@@ -32,23 +32,6 @@ if __name__ == "__main__":
         utility_func=lambda cycle, p: 0.7,
         tunnel_cycle=19,
     )
-    # dtmp1 = State(
-    #     name="Dtmp1",
-    #     is_temporary=True
-    # )
-    # dtmp2 = State(
-    #     name="Dtmp2",
-    #     is_temporary=True
-    # )
-    # # 疾病状态转移
-    # disease.add_transition(
-    #     dtmp1,
-    #     probability_func=lambda cycle, p: 0.6
-    # )
-    # disease.add_transition(
-    #     dtmp2,
-    #     probability_func=lambda cycle, p: 0.6
-    # )
 
     disease.add_transition(
         disease,
