@@ -406,12 +406,12 @@ def my_treeage_shaicha():
     )
     CHB.add_transition(
         CHB_shaicha,
-        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=700, cycle_mode="and"),
+        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=100, cycle_mode="and"),
         probability_func=lambda cycle, p: 1
     )
     CHB.add_transition(
         CHB_noshaicha,
-        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=700, cycle_mode="or"),
+        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=100, cycle_mode="or"),
         probability_func=lambda cycle, p: 1
     )
     # endregion
@@ -433,12 +433,12 @@ def my_treeage_shaicha():
     )
     pCC.add_transition(
         pCC_shaicha,
-        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=700, cycle_mode="and"),
+        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=100, cycle_mode="and"),
         probability_func=lambda cycle, p: 1
     )
     pCC.add_transition(
         pCC_noshaicha,
-        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=700, cycle_mode="or"),
+        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=100, cycle_mode="or"),
         probability_func=lambda cycle, p: 1
     )
     # endregion
@@ -460,12 +460,12 @@ def my_treeage_shaicha():
     )
     pDCC.add_transition(
         pDCC_shaicha,
-        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=700, cycle_mode="and"),
+        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=100, cycle_mode="and"),
         probability_func=lambda cycle, p: 1
     )
     pDCC.add_transition(
         pDCC_noshaicha,
-        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=700, cycle_mode="or"),
+        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=100, cycle_mode="or"),
         probability_func=lambda cycle, p: 1
     )
     # endregion
@@ -502,12 +502,12 @@ def my_treeage_shaicha():
     )
     pHCCI.add_transition(
         pHCCI_shaicha,
-        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=700, cycle_mode="and"),
+        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=100, cycle_mode="and"),
         probability_func=lambda cycle, p: 1
     )
     pHCCI.add_transition(
         pHCCI_noshaicha,
-        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=700, cycle_mode="or"),
+        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=100, cycle_mode="or"),
         probability_func=lambda cycle, p: 1
     )
     # endregion
@@ -529,12 +529,12 @@ def my_treeage_shaicha():
     )
     pHCCII.add_transition(
         pHCCII_shaicha,
-        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=700, cycle_mode="and"),
+        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=100, cycle_mode="and"),
         probability_func=lambda cycle, p: 1
     )
     pHCCII.add_transition(
         pHCCII_noshaicha,
-        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=700, cycle_mode="or"),
+        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=100, cycle_mode="or"),
         probability_func=lambda cycle, p: 1
     )
     # endregion
@@ -556,12 +556,12 @@ def my_treeage_shaicha():
     )
     pHCCIII.add_transition(
         pHCCIII_shaicha,
-        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=700, cycle_mode="and"),
+        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=100, cycle_mode="and"),
         probability_func=lambda cycle, p: 1
     )
     pHCCIII.add_transition(
         pHCCIII_noshaicha,
-        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=700, cycle_mode="or"),
+        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=100, cycle_mode="or"),
         probability_func=lambda cycle, p: 1
     )
     # endregion
@@ -583,12 +583,12 @@ def my_treeage_shaicha():
     )
     pHCCIV.add_transition(
         pHCCIV_shaicha,
-        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=700, cycle_mode="and"),
+        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=100, cycle_mode="and"),
         probability_func=lambda cycle, p: 1
     )
     pHCCIV.add_transition(
         pHCCIV_noshaicha,
-        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=700, cycle_mode="or"),
+        condition=create_condition_gq_leq(min_cycle=-350, max_cycle=100, cycle_mode="or"),
         probability_func=lambda cycle, p: 1
     )
     # endregion
@@ -1945,9 +1945,44 @@ def my_treeage_shaicha():
     )
     # endregion
     model = MarkovModel(
-        states=[death, death_hcc, death_dcc, death_cc, Healthy, CHB, CHB_shaicha, CHB_noshaicha, pCC, pCC_shaicha, pCC_noshaicha, pDCC, pDCC_shaicha, pDCC_noshaicha, cured, pHCCI, pHCCI_shaicha, pHCCI_noshaicha, pHCCII, pHCCII_shaicha, pHCCII_noshaicha, pHCCIII, pHCCIII_shaicha, pHCCIII_noshaicha, pHCCIV, pHCCIV_shaicha, pHCCIV_noshaicha, cHCCI, cHCCII, cHCCIII, cHCCIV, sHCCI, sHCCII, sHCCIII, sHCCIV, sCC, sDCC, CC, DCC, tCC, tDCC, CHB_S_TO_CC, CHB_S_TO_CC_3, CHB_S_TO_pHCCI, CHB_S_TO_pHCCI_3, CHB_stay, CHB_stay_3, pCC_stay, pCC_stay_3, pCC_to_DCC, pCC_to_DCC_3, pCC_to_HCCI, pCC_to_HCCI_3, pCC_ns_live, pCC_ns_fx, pCC_ns_fx_nt, pCC_ns_nfx, pDCC_stay, pDCC_stay_3, pDCC_to_pHCCI, pDCC_to_pHCCI_3, pDCC_ns_live, pDCC_ns_live_fx, pDCC_ns_live_fx_nt, pDCC_ns_live_nfx, pHCCI_s_stay, pHCCI_s_stay_3, pHCCI_s_to_pII, pHCCI_s_to_pII_3, pHCCI_s_to_cI, pHCCI_s_to_cI_3, pHCCII_s_stay, pHCCII_s_stay_3, pHCCII_s_to_pIII, pHCCII_s_to_pIII_3, pHCCII_s_to_cII, pHCCII_s_to_cII_3, pHCCIII_s_stay, pHCCIII_s_stay_3, pHCCIII_s_to_pIV, pHCCIII_s_to_pIV_3, pHCCIII_s_to_cIII, pHCCIII_s_to_cIII_3, pHCCIV_s_stay, pHCCIV_s_stay_3, pHCCIV_s_to_cIV, pHCCIV_s_to_cIV_3, sCC_live, sCC_live_nt, sDCC_live, sDCC_live_nt, CC_live, CC_live_nt, DCC_live, DCC_live_nt, tCC_live, tDCC_live,
+        # states=[death, death_hcc, death_dcc, death_cc, Healthy, CHB, CHB_shaicha, CHB_noshaicha, pCC, pCC_shaicha, pCC_noshaicha, pDCC, pDCC_shaicha,
+        #         pDCC_noshaicha, cured, pHCCI, pHCCI_shaicha, pHCCI_noshaicha, pHCCII, pHCCII_shaicha, pHCCII_noshaicha, pHCCIII, pHCCIII_shaicha,
+        #         pHCCIII_noshaicha, pHCCIV, pHCCIV_shaicha, pHCCIV_noshaicha, cHCCI, cHCCII, cHCCIII, cHCCIV, sHCCI, sHCCII, sHCCIII, sHCCIV,
+        #         sCC, sDCC, CC, DCC, tCC, tDCC,
+        #         CHB_S_TO_CC, CHB_S_TO_CC_3, CHB_S_TO_pHCCI, CHB_S_TO_pHCCI_3, CHB_stay, CHB_stay_3,
+        #         pCC_stay, pCC_stay_3, pCC_to_DCC, pCC_to_DCC_3, pCC_to_HCCI, pCC_to_HCCI_3, pCC_ns_live, pCC_ns_fx, pCC_ns_fx_nt, pCC_ns_nfx,
+        #         pDCC_stay, pDCC_stay_3, pDCC_to_pHCCI, pDCC_to_pHCCI_3, pDCC_ns_live, pDCC_ns_live_fx, pDCC_ns_live_fx_nt, pDCC_ns_live_nfx,
+        #         pHCCI_s_stay, pHCCI_s_stay_3, pHCCI_s_to_pII, pHCCI_s_to_pII_3, pHCCI_s_to_cI, pHCCI_s_to_cI_3,
+        #         pHCCII_s_stay, pHCCII_s_stay_3, pHCCII_s_to_pIII, pHCCII_s_to_pIII_3, pHCCII_s_to_cII, pHCCII_s_to_cII_3,
+        #         pHCCIII_s_stay, pHCCIII_s_stay_3, pHCCIII_s_to_pIV, pHCCIII_s_to_pIV_3, pHCCIII_s_to_cIII, pHCCIII_s_to_cIII_3,
+        #         pHCCIV_s_stay, pHCCIV_s_stay_3, pHCCIV_s_to_cIV, pHCCIV_s_to_cIV_3,
+        #         sCC_live, sCC_live_nt, sDCC_live, sDCC_live_nt, CC_live, CC_live_nt, DCC_live, DCC_live_nt, tCC_live, tDCC_live,
+        #         ],
+        states=[death, death_hcc, death_dcc, death_cc, Healthy, CHB,
+                CHB_shaicha, CHB_S_TO_CC, CHB_S_TO_CC_3, CHB_S_TO_pHCCI, CHB_S_TO_pHCCI_3, CHB_stay, CHB_stay_3,
+                CHB_noshaicha,
+                pCC,
+                pCC_shaicha, pCC_stay, pCC_stay_3, pCC_to_DCC, pCC_to_DCC_3, pCC_to_HCCI, pCC_to_HCCI_3,
+                pCC_noshaicha, pCC_ns_live, pCC_ns_fx, pCC_ns_fx_nt, pCC_ns_nfx,
+                pDCC,
+                pDCC_shaicha, pDCC_stay, pDCC_stay_3, pDCC_to_pHCCI, pDCC_to_pHCCI_3,
+                pDCC_noshaicha, pDCC_ns_live, pDCC_ns_live_fx, pDCC_ns_live_fx_nt, pDCC_ns_live_nfx,
+                cured,
+                pHCCI, pHCCI_shaicha, pHCCI_noshaicha,
+                pHCCII, pHCCII_shaicha, pHCCII_noshaicha,
+                pHCCIII, pHCCIII_shaicha, pHCCIII_noshaicha,
+                pHCCIV, pHCCIV_shaicha, pHCCIV_noshaicha,
+                cHCCI, cHCCII, cHCCIII, cHCCIV, sHCCI, sHCCII, sHCCIII, sHCCIV,
+                sCC, sDCC, CC, DCC, tCC, tDCC,
+                pHCCI_s_stay, pHCCI_s_stay_3, pHCCI_s_to_pII, pHCCI_s_to_pII_3, pHCCI_s_to_cI, pHCCI_s_to_cI_3,
+                pHCCII_s_stay, pHCCII_s_stay_3, pHCCII_s_to_pIII, pHCCII_s_to_pIII_3, pHCCII_s_to_cII,
+                pHCCII_s_to_cII_3,
+                pHCCIII_s_stay, pHCCIII_s_stay_3, pHCCIII_s_to_pIV, pHCCIII_s_to_pIV_3, pHCCIII_s_to_cIII,
+                pHCCIII_s_to_cIII_3,
+                pHCCIV_s_stay, pHCCIV_s_stay_3, pHCCIV_s_to_cIV, pHCCIV_s_to_cIV_3,
+                sCC_live, sCC_live_nt, sDCC_live, sDCC_live_nt, CC_live, CC_live_nt, DCC_live, DCC_live_nt, tCC_live,
+                tDCC_live,
                 ],
-
         initial_distribution={"Healthy": 100000}
     )
 
@@ -1978,8 +2013,10 @@ def my_treeage_shaicha():
         print(f"{i}- {tmp[[1, 0, 2, 3, 14, 15, 18, 21, 24, 31, 32, 33, 34, 39, 40]]}")
     df = pd.DataFrame(data_list, columns=columns)
     # df.to_excel("res1.xlsx")
-
-
+    ss = []
+    for state in model.states:
+        ss.append(state.name)
+    print(len(ss), len(list(set(ss))))
 if __name__ == "__main__":
     import pandas as pd
     my_treeage_shaicha()

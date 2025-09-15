@@ -204,9 +204,10 @@ class MarkovModel:
 
             # 处理每个状态的转移
             for state_idx, from_state in enumerate(self.states):
+                if from_state.is_temporary:
+                    continue
                 state_name = from_state.name
                 max_stay = from_state.tunnel_cycle if from_state.tunnel_cycle is not None else max_dwell
-
                 # 处理该状态下不同停留时间的个体
                 for dwell_time in range(max_stay + 1):
                     # 当前停留时间的个体数量
@@ -258,7 +259,6 @@ class MarkovModel:
                             if transition["condition"](t, params)
                                and not from_state.is_temporary # 因转移一定是非临时状态开始的，不过加不加应该效果一样
                         ]
-
                         # 计算总概率
                         total_prob = sum(tran["probability_func"](t, params)
                                          for tran in applicable_transitions)
@@ -327,7 +327,11 @@ class MarkovModel:
 
     def _get_state_index(self, state_name: str) -> int:
         """获取状态的索引"""
-        return list(self.state_map.keys()).index(state_name)
+        # return list(self.state_map.keys()).index(state_name)
+
+        if not hasattr(self, '_state_index_map'):
+            self._state_index_map = {state.name: i for i, state in enumerate(self.states)}
+        return self._state_index_map[state_name]
 
     def get_dwell_time_distribution(self, state_name: str, cycle: int) -> np.ndarray:
         """获取指定状态在指定周期的停留时间分布"""

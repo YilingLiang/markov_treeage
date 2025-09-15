@@ -10,7 +10,7 @@ def create_condition(min_cycle: int = None, max_cycle: int = None) -> Callable:
     :return: 条件函数
     """
 
-    def condition(cycle: int, params: Dict) -> bool:
+    def conditionx(cycle: int, params: Dict) -> bool:
         result = True
         if min_cycle is not None:
             result = result and (cycle >= min_cycle)
@@ -18,7 +18,7 @@ def create_condition(min_cycle: int = None, max_cycle: int = None) -> Callable:
             result = result and (cycle < max_cycle)
         return result
 
-    return condition
+    return conditionx
 
 
 def create_condition_gq_leq(min_cycle: int = None, max_cycle: int = None, cycle_mode: str="and") -> Callable:
